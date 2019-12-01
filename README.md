@@ -1,2 +1,2 @@
-# chatbot-components
-Use of wit.ai to make reusable CoCo chat components
+# Bot Server
+A simple server that routes `<component_name>/<session_id>` `POST` requests to bot components on the machine or hosted on a service.
