@@ -1,0 +1,11 @@
+{
+	"competition": {
+		"url": "https://app.coco.imperson.com/api/exchange/competition_vp3/",
+		"headers": {
+			"developer_key": ""
+		}
+	},
+	"tester": {
+		"path": "./test"
+	}
+}
