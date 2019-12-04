@@ -1,0 +1,4 @@
+#!/bin/bash
+
+echo 'Starting Bot Component Server - (c) 2019 Graham Robertson'
+node index.js $@

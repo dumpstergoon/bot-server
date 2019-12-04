@@ -1,0 +1,6 @@
+#!/bin/bash
+
+# useful tools:
+PATH=/home/grambo/bin/functions:$PATH
+
+
