@@ -1,0 +1,17 @@
+{
+	"index": [
+		"TODO - set message..."
+	],
+	"signup_prompt": [
+		"Hello there! I see you're not a member. Shall I get you signed-up this [time_of_day]?",
+		"Good [time_of_day], new comer. Shall we get you signed-up?"
+	],
+	"signup_denied": [
+		"Well... I suppose that's the end of the road for us then. Perhaps you'll reconsider? ",
+		"Our time together was far too brief 😕️ Perhaps I can convince you otherwise? 😉️"
+	],
+	"signup_still_denied": [
+		"Aww too bad. Maybe next time 👋️",
+		"Sorry to see you go! Please come back again soon 🙂️"
+	]
+}

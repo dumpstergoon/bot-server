@@ -5,13 +5,13 @@ const fs = require("fs");
 const args = process.argv.slice(2);
 
 let [name, url, key] = args;
-let registry = require("../components.json");
+let registry = require("../bots.json");
 
 registry[name] = {
 	url: url,
-	headerrs: {
+	headers: {
 		developer_key: key || ""
 	}
 }
 
-fs.writeFileSync("./components.json", JSON.stringify(registry));
+fs.writeFileSync("./bots.json", JSON.stringify(registry));

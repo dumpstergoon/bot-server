@@ -1,0 +1,31 @@
+#!/usr/bin/env node
+// @ts-nocheck
+'use strict';
+
+const clients = require("./clients");
+const actions = require("./actions");
+
+const bot = require('./bot')(
+	require("./responses.json"),
+	{
+		// Action example:
+		action_name: (msg, context, state, responses, send) => {
+			// Do some stuff with msg then maybe wait for an
+			// API call or asynchronous operation... then call send.
+			send(
+				// Next action name:
+				"action_name",
+				// Response text:
+				responses.random().render({
+					/* response render context */
+				}),
+				// Updated context:
+				context
+			);
+		},
+
+		index: actions.default("index"), // loop
+	});
+
+// Hooks our bot into the appropriate IO:
+require('./bootstrap')(bot);

@@ -3,12 +3,11 @@ const express = require('express'),
 		app = express(),
  		port = process.env.PORT || 3000;
 const request = require("request");
-const { execFile } = require("child_process");
-const fs = require("fs");
+const { readdirSync } = require("fs");
+const { fork } = require("child_process");
 
-const BOT_DIR = process.env.COMPONENTS || "./components";
-const REMOTE_BOTS = require("./components.json");
-const SESSION_ID = require("uuid/v1")();
+const BOT_DIR = "./bots";
+const REMOTE_BOTS = require("./bots.json");
 
 app.listen(port);
 app.use(express.json());
@@ -16,10 +15,18 @@ app.use(express.urlencoded({ extended: true }));
 
 console.log(`serving on port ${port}`);
 
+app.all('*', (req, res, next) => {
+	res.header("Access-Control-Allow-Origin", "*");
+	res.header("Access-Control-Request-Headers", "GET, POST, OPTIONS");
+	res.header("Access-Control-Allow-Headers", "DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range");
+	res.header("Access-Control-Expose-Headers", "Content-Length,Content-Range")
+	next();
+});
+
 const remote_component = description => (req, res) => {
 	console.log(`User input: "${req.body.user_input}"`);
 	request({
-		url: description.url + SESSION_ID,
+		url: description.url + req.params.session_id,
 		method: 'POST',
 		headers: description.headers || {},
 		body: JSON.stringify(req.body)
@@ -31,33 +38,42 @@ const remote_component = description => (req, res) => {
 	})
 };
 
-const local_component = description => (req, res) => {
-	console.log('Executing component:', description.path);
+const local_component = bot => (req, res) => {
+	console.log('Executing component');
 	console.log(`User input: "${req.body.user_input}"`);
-	execFile(
-		description.path,
-		[SESSION_ID, JSON.stringify(req.body)],
-		(error, stdout, stderr) => {
-			if (error)
-				res.send(stderr);
-			else
-				console.log('Bot response:',
-					JSON.parse(stdout)) ||
-				res.json(JSON.parse(stdout));
-		}
-	);
+
+	bot.stdout.pipe(process.stdout);
+
+	bot.on('message', function listener(message, _msg = JSON.parse(message)) {
+		console.log('Bot response:', _msg);
+		res.json(_msg);
+		bot.removeListener('message', listener);
+	});
+
+	bot.send(JSON.stringify(Object.assign({}, req.body, {
+		session_id: req.params.session_id
+	})));
 };
 
 
 
 Object.entries(REMOTE_BOTS).forEach(([name, description]) => {
-	console.log(`Routing "localhost:${port}/${name}" to ${description.url}`);
-	app.route(`/${name}`).post(remote_component(description));
+	console.log(`Routing "localhost:${port}/${name}" to uri ${description.url}`);
+	app.route(`/${name}/:session_id`).post(remote_component(description));
 });
 
-fs.readdirSync(BOT_DIR).forEach(name => {
-	console.log(`Routing "localhost:${port}/${name}" to ${BOT_DIR}/${name}/`);
-	app.route(`/${name}`).post(local_component({
-		path: `${BOT_DIR}/${name}/index`
-	}));
+readdirSync(BOT_DIR).forEach(name => {
+	console.log(`Routing "localhost:${port}/${name}" to sub-process ${BOT_DIR}/${name}/`);
+
+	let bot = fork(
+		`${BOT_DIR}/${name}/index`, // path
+		[
+			/* DEFAULTS when we spin-up...
+			maybe here is where can override default responses... */
+		],
+		{
+			stdio: ['pipe', 'pipe', 'pipe', 'ipc']
+		});
+
+	app.route(`/${name}/:session_id`).post(local_component(bot));
 });

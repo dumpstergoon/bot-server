@@ -1,0 +1,36 @@
+#!/usr/bin/env node
+// @ts-nocheck
+'use strict';
+
+const {
+	action,
+	bot,
+	bootstrap
+} = require("../../component");
+
+const nlp = require('../../nlp');
+
+const component = bot(
+	require("./responses.json"),
+	{
+		// Action example:
+		action_name: (msg, context, state, responses, send) => {
+			// Do some stuff with msg then maybe wait for an
+			// API call or asynchronous operation... then call send.
+			send(
+				// Next action name:
+				"action_name",
+				// Response text:
+				responses.random().render({
+					/* response render context */
+				}),
+				// Updated context:
+				context
+			);
+		},
+
+		index: action.default("index"),
+	});
+
+// Hooks our bot into the appropriate IO:
+bootstrap(component);
