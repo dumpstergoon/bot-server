@@ -3,49 +3,48 @@ const render_response = (template, model) => {
 	return template.replace(/\[[*]+\]/gi, match => model[match] || `<error: "${match}" not defined>`);
 };
 
+const { response } = require('../models');
+
 module.exports = (
 	responses,
 	actions,
 	_queue = [],
 	_state = require("./state"),
 	_timestamp = 0) => {
-		const create_response = (
-			message = "",
-			state = {},
-			confidence = 1,
-			idontknow = confidence < 0.5,
-			component_done = confidence === 0,
-			component_failed = confidence === -1) => {
-			return {
-				response: message,
-				response_time: (Date.now() - _timestamp) / 1000,
-				confidence: confidence,
-				idontknow: idontknow,
-				component_done: component_done,
-				component_failed: component_failed,
-				updated_context: state,
-			};
-		};
+		const send = (next_action, msg, done = false) => {
+			let state = _queue.shift()[2];
+			state.action = next_action;
 
-		const send = (next_action, msg, context) => {
-			io.send(create_response(msg, context));
-			// This is hacky.. we should do better...
-			_queue.shift()[2].action = next_action;
+			io.send(response(_timestamp, msg, state.context, done ? 0 : 1));
+
 			if (_queue.length)
 				next();
+		};
+
+		const route = next_action => {
+			let args = _queue.shift();
+			let state = args[2];
+
+			args[1] = state.context || {};
+			args[2].action = next_action;
+
+			_queue.push(args);
+			next();
 		};
 		
 		const next = () => {
 			if (_queue.length === 0)
 				return;
 			
-			let [msg, context, state] = _queue[0];
-			
 			_timestamp = Date.now();
 			
+			let [msg, context, state] = _queue[0];
+			state.context = Object.assign(state.context || {}, context);
+
+			// console.log('>>', state.action.toUpperCase());
+
 			actions[state.action](
 				msg,
-				context,
 				state,
 				Object.assign((responses[state.action] ||
 					[`<error: no responses found for action "${state.action}"`])
@@ -58,7 +57,8 @@ module.exports = (
 							return this[Math.round(Math.random() * (this.length - 1))];
 						}
 					}),
-				send
+				send,
+				route
 			);
 		};
 

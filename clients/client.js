@@ -14,6 +14,7 @@ const pipe = (list = []) =>
 const Client = endpoint => {
 	let on_response = pipe();
 	let on_done = pipe();
+	let on_stumped = pipe();
 	let on_failed = pipe();
 
 	return {
@@ -29,6 +30,10 @@ const Client = endpoint => {
 			on_failed.add(callback);
 			return this;
 		},
+		stumped(callback) {
+			on_stumped.add(callback);
+			return this;
+		},
 		send(message, context = {}) {
 			request({
 				url: endpoint,
@@ -40,6 +45,8 @@ const Client = endpoint => {
 			}, (e, r, b) => {
 				if (e || b.component_failed)
 					on_failed(endpoint, message, context, b);
+				else if (b.out_of_context || b.idontknow)
+					on_stumped(b);
 				else {
 					on_response(b);
 					if (b.component_done)

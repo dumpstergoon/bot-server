@@ -1,39 +1,49 @@
 // @ts-nocheck
 const clients = require("../clients");
+const nlp = require("../nlp");
 
 module.exports = {
 	default: next_action => {
-		return (msg, context, state, responses, send) => {
-			send(
-				// Next action:
-				next_action,
-				// Response text:
-				responses.random().render({
-					// TODO: do something with the context...
-				}),
-				// Updated context:
-				context
-			);
+		return (msg, state, responses, send, route) => {
+			let user = state.context.user;
+			send(next_action, responses.random().render({
+				// TODO: defaults somewhere else....
+				name: user ? user.firstName : "boss",
+			}));
 		};
 	},
-	bot: (bot_name, router) => {
-		return (msg, context, state, responses, send) => {
+	bot: (bot_name, router, out_of_context, failed) => {
+		return (msg, state, responses, send, route) => {
 			clients.bot(bot_name, state.session_id)
 				.response(data => {
-					send(
-						// Next action:
-						data.component_done ? router(data.updated_context) : state.action,
-						// Response text:
-						data.response,
-						// Updated context:
-						context
-					);
+					let context = Object.assign(state.context, data.updated_context);
+					if (data.out_of_context || data.idontknow)
+						route(out_of_context(context));
+					else if (data.component_failed)
+						route(failed(context));
+					else
+						send(data.component_done ?
+							router(context) :
+								state.action, data.response);
 				})
-				.send(msg, context);
+				.send(msg, state.context);
 		};
 	},
-	// Asks a question to get a yes or no answer...
-	prompt: () => {
-
-	}
+	confirm: (yes_action, no_action, other_action) => {
+		return (msg, state, responses, send, route) => {
+			if (nlp.yes.test(msg))
+				route(yes_action);
+			else if (nlp.no.test(msg))
+				route(no_action);
+			else
+				route(other_action);
+		};
+	},
+	exit: () => {
+		return (msg, state, responses, send, route) => {
+			send("", responses.random(), true);
+			if (!process.send)
+				process.exit(0);
+		};
+	},
 };

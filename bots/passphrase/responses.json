@@ -3,8 +3,5 @@
 		"Howdy.  What can I do for ya?",
 		"Hiya! How can I help you?",
 		"Hello there! How may I be of service?"
-	],
-	"welcome_user": [
-		"Great to see you again, [name]! What an I do for you?"
 	]
 }

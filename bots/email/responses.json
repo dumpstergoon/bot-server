@@ -1,0 +1,9 @@
+{
+	"index": [
+		"What is your email address?",
+		"Can I get your email?"
+	],
+	"email": [
+		"Thanks! [email] is a great email address."
+	]
+}

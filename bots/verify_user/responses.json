@@ -1,0 +1,23 @@
+{
+	"index": [
+		"That's great! looks like you're not a verified user... would you like to get started?"
+	],
+	"ask_email": [
+		"So what's your email?"
+	],
+	"ask_passphrase": [
+		"Great, Graham! And please provide the 1st, 3rd, and 4th letters of your passphrase."
+	],
+	"user_not_found": [
+		"No user found by that email address. Try again."
+	],
+	"passphrase_denied": [
+		"Passphrase wasn't a match..."
+	],
+	"good_exit": [
+		"You're now verified, Graham!"
+	],
+	"bad_exit": [
+		"Let's continue as a guest, shall we?"
+	]
+}

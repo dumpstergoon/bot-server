@@ -1,0 +1,34 @@
+#!/usr/bin/env node
+// @ts-nocheck
+'use strict';
+
+const {
+	action,
+	bot,
+	bootstrap
+} = require("../../component");
+
+const nlp = require('../../nlp');
+const { info } = require('../../models');
+
+const component = bot(
+	require("./responses.json"),
+	{
+		index: action.default("email"),
+		email: (msg, state, responses, send) => {
+			state.context.userInfo = {
+				email: nlp.email.exec(msg),
+			};
+			send(
+				"exit",
+				responses.random().render({
+					email: state.context.userInfo.email
+				})
+			);
+		},
+
+		exit: action.exit()
+	});
+
+// Hooks our bot into the appropriate IO:
+bootstrap(component);

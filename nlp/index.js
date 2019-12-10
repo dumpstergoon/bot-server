@@ -11,11 +11,14 @@ module.exports = {
 	]),
 	no: expression([
 		/^n$/i,
-		/no|nah|pass|don't/i,
+		/no|nah|pass|don't|cancel|forget/i,
 	]),
 	number: expression([
 		/([0-9]+)/gi,
 		/\b((twen|thir|fo[u]?r|fif|six|seven|eight|nine)(teen|ty))[\s-]?(one|two|three|four|five|six|seven|eight|nine)?\b/gi,
 		/\b(one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve)\b/gi,
-	], result => result.slice(1)) // This is good enough for now...
+	], result => result.slice(1)),
+	email: expression([
+		/([.]+@[.]+\.[a-z]+)/gi
+	], result => result[0])
 };

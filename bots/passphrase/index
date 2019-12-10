@@ -2,10 +2,15 @@
 // @ts-nocheck
 'use strict';
 
-const clients = require("./clients");
-const actions = require("./actions");
+const {
+	action,
+	bot,
+	bootstrap
+} = require("../../component");
 
-const bot = require('./bot')(
+const nlp = require('../../nlp');
+
+const component = bot(
 	require("./responses.json"),
 	{
 		// Action example:
@@ -24,8 +29,9 @@ const bot = require('./bot')(
 			);
 		},
 
-		index: actions.default("index"), // loop
+		index: action.default("phonenumber"),
+		phonenumber: action.bot("phonenumber", context => "index")
 	});
 
 // Hooks our bot into the appropriate IO:
-require('./bootstrap')(bot);
+bootstrap(component);

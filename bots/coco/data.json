@@ -1,0 +1,209 @@
+{
+	"locations": [
+		{
+			"city": "Toronto",
+			"country": "Canada",
+			"employees": 20,
+			"contact": {
+				"manager": "Graham Robertson",
+				"phone": "1-416-220-4610",
+				"email": "toronto-store@coco-inc.retail"
+			},
+			"stock": {
+				"Butlertron": 30,
+				"La Tess Là": 5,
+				"The Robit": 15
+			}
+		},
+		{
+			"city": "NYC",
+			"country": "'Murica",
+			"employees": 20,
+			"contact": {
+				"manager": "John Wayne",
+				"phone": "1-514-220-4610",
+				"email": "nyc-store@coco-inc.retail"
+			},
+			"stock": {
+				"Butlertron": 80,
+				"La Tess Là": 35,
+				"Robit": 100
+			}
+		},
+		{
+			"city": "LA",
+			"country": "'Murica",
+			"employees": 20,
+			"contact": {
+				"manager": "Joe Rogan",
+				"phone": "1-618-220-4610",
+				"email": "la-store@coco-inc.retail"
+			},
+			"stock": {
+				"Butlertron": 80,
+				"La Tess Là": 35,
+				"Robit": 100
+			}
+		},
+		{
+			"city": "London",
+			"country": "Jolly old England",
+			"employees": 20,
+			"contact": {
+				"manager": "Boris \"Don't cut off my\" Johnson",
+				"phone": "+447886890725",
+				"email": "london-store@coco-inc.retail"
+			},
+			"stock": {
+				"Butlertron": 80,
+				"La Tess Là": 35,
+				"Robit": 100
+			}
+		},
+		{
+			"city": "Buckfastville",
+			"country": "Mel Gibson Land (aka Scotland)",
+			"employees": 20,
+			"contact": {
+				"manager": "Ricola Surgeon",
+				"phone": "+447316890725",
+				"email": "glasgow-store@coco-inc.retail"
+			},
+			"stock": {
+				"Butlertron": 80,
+				"La Tess Là": 35,
+				"Robit": 100
+			}
+		},
+		{
+			"city": "Tokyo",
+			"country": "Japan",
+			"employees": 20,
+			"contact": {
+				"manager": "Akira-Chun",
+				"phone": "what do japanese phone numbers look like?",
+				"email": "tokyo-store@coco-inc.retail"
+			},
+			"stock": {
+				"Butlertron": 80,
+				"La Tess Là": 35,
+				"Robit": 100
+			}
+		},
+		{
+			"city": "Singapore",
+			"country": "Singapore",
+			"employees": 20,
+			"contact": {
+				"manager": "Akira-Chun",
+				"phone": "not even going to try anymore...",
+				"email": "singapore-store@coco-inc.retail"
+			},
+			"stock": {
+				"Butlertron": 80,
+				"La Tess Là": 35,
+				"Robit": 100
+			}
+		},
+		{
+			"city": "Berlin",
+			"country": "Germany",
+			"employees": 20,
+			"contact": {
+				"manager": "David Hasselhof",
+				"phone": "xxxxxxxxxx",
+				"email": "berlin-store@coco-inc.retail"
+			},
+			"stock": {
+				"Butlertron": 80,
+				"La Tess Là": 35,
+				"Robit": 100
+			}
+		},
+		{
+			"city": "Madrid",
+			"country": "Spain",
+			"employees": 20,
+			"contact": {
+				"manager": "Aina Luis",
+				"phone": "xxxxxxxxxx",
+				"email": "madrid-store@coco-inc.retail"
+			},
+			"stock": {
+				"Butlertron": 80,
+				"La Tess Là": 35,
+				"Robit": 100
+			}
+		},
+		{
+			"city": "Barcelona",
+			"country": "Spain",
+			"employees": 20,
+			"contact": {
+				"manager": "Emilio Estevez",
+				"phone": "xxxxxxxxxx",
+				"email": "barcelona-store@coco-inc.retail"
+			},
+			"stock": {
+				"Butlertron": 80,
+				"La Tess Là": 35,
+				"Robit": 100
+			}
+		},
+		{
+			"city": "https://www.coco-inc.retail/",
+			"country": "The Internet",
+			"employees": 60,
+			"contact": {
+				"manager": "Chatty Hewman",
+				"phone": "https://www.coco-inc.retail/",
+				"email": "online-store@coco-inc.retail"
+			},
+			"stock": {
+				"Chatty Hewman": 1000
+			}
+		}
+	],
+	"products": [
+		{
+			"name": "Butlertron",
+			"description": "A handy robot for helping with chores around the house.",
+			"price": {
+				"USD": 2500,
+				"CAD": 3000,
+				"EUR": 2300,
+				"GBP": 2000
+			}
+		},
+		{
+			"name": "La Tess Là",
+			"description": "Our famous car-shaped robot. Drives you around in style!",
+			"price": {
+				"USD": 55000,
+				"CAD": 70000,
+				"EUR": 55000,
+				"GBP": 50000
+			}
+		},
+		{
+			"name": "The Robit",
+			"description": "01010100 01101000 01101001 01110011 00100000 01101001 01110011 00100000 01101110 01101111 01110100 00100000 01100001 00100000 01110010 01101111 01100010 01101111 01110100 00101110",
+			"price": {
+				"USD": 5400,
+				"CAD": 6000,
+				"EUR": 5600,
+				"GBP": 5200
+			}
+		},
+		{
+			"name": "Chatty Hewman",
+			"description": "A customisable receptionist with a colourful personality!",
+			"price": {
+				"USD": 12500,
+				"CAD": 15000,
+				"EUR": 10500,
+				"GBP": 10000
+			}
+		}
+	]
+}

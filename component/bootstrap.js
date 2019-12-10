@@ -30,8 +30,6 @@ module.exports = bot => {
 			console.log(response.response);
 			if (!response.component_done)
 				input_prompt();
-			else
-				console.log("ALL DONE.");
 		};
 	
 		input_prompt("Type to get started");

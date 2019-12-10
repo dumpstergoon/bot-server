@@ -29,8 +29,7 @@ const component = bot(
 			);
 		},
 
-		index: action.default("phonenumber"),
-		phonenumber: action.bot("phonenumber", context => "index")
+		index: action.default("index"),
 	});
 
 // Hooks our bot into the appropriate IO:
