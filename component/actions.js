@@ -22,7 +22,7 @@ module.exports = {
 				.response(data => {
 					send(
 						// Next action:
-						data.component_done ? router(data) : state.action,
+						data.component_done ? router(data.updated_context) : state.action,
 						// Response text:
 						data.response,
 						// Updated context:
@@ -32,4 +32,8 @@ module.exports = {
 				.send(msg, context);
 		};
 	},
+	// Asks a question to get a yes or no answer...
+	prompt: () => {
+
+	}
 };
