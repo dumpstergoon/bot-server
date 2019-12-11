@@ -9,6 +9,8 @@ elif [[ $command == "create" ]]; then
 	./bin/create-component $@
 elif [[ $command == "add" ]]; then
 	./bin/add-component $@
+elif [[ $command == "install" ]]; then
+	./bin/install $@
 else
 	echo "Command \"$command\" not found."
 	exit 1
