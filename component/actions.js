@@ -49,7 +49,7 @@ module.exports = {
 		};
 	},
 	// Passes shit to another component
-	pass: (next_action, context) => {
+	pass: (next_action, context = {}) => {
 		return (msg, state, responses, send, route, pass) => {
 			let user = state.context.user;
 			let info = state.context.userInfo;

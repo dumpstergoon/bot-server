@@ -22,6 +22,7 @@ const component = bot(
 		ask_email: action.default("verify_email"),
 		verify_email: (msg, state, responses, send, route, pass) => {
 			// TODO: verify the email... then route to "email_verified"
+			console.log('HEREEE');
 			route("email_verified");
 		},
 		email_verified: action.pass("ask_passphrase"),

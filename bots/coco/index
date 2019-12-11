@@ -21,7 +21,7 @@ const component = bot(
 			// If so, ask back...
 
 			// Do some basic small-talk interaction... once complete, take user to the "menu"
-
+			
 			if (state.context.user)
 				route("welcome_user");
 			else
