@@ -15,38 +15,23 @@ const component = bot(
 	require("./responses.json"),
 	{
 		index: (msg, state, responses, send, route) => {
+			// Right, soo we'll have received some message like hello...
+
+			// TODO: check if they ask how we're doing...
+			// If so, ask back...
+
+			// Do some basic small-talk interaction... once complete, take user to the "menu"
+
 			if (state.context.user)
 				route("welcome_user");
 			else
 				route("verify_user");
 		},
-		welcome_user: action.default("menu"),
-		verify_user: action.bot(
-			"verify_user",
-			context => "welcome_user",
-			context => "verify_user",
-			context => "signup_prompt"),
-
-		signup_prompt: action.default("signup_confirm"),
-		signup_confirm: action.confirm("signup_form", "menu"),
-
-		signup_form: action.bot("signup", context => "welcome_user"),
-
-		/* The menu is our meat and potatoes... */
-		menu: (msg, state, responses, send, route) => {
-			send("menu", responses.random().render({}));
-		},
-		menuitem_done: action.default("menu"),
-
-		company_details: action.default("menuitem_done"),
-		locations: action.default("menuitem_done"),
-		location_details: action.default("menuitem_done"),
-		products: action.default("menuitem_done"),
-		stock_availability: action.default("menuitem_done"),
-
-
-		goodbye: action.bot("goodbye", context => "exit"),
-		exit: action.exit(),
+		welcome_user: action.default("index"),
+		verify_user: action.bot("verify_user", (response, state, send, route, pass) => {
+			console.log('USER VERIFIED');
+			send("index", response)
+		}),
 	});
 
 // Hooks our bot into the appropriate IO:

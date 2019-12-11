@@ -1,5 +1,6 @@
 // @ts-nocheck
 const render_response = (template, model) => {
+	console.log('BOT REDNER RESPONSE', template, model);
 	return template.replace(/\[[*]+\]/gi, match => model[match] || `<error: "${match}" not defined>`);
 };
 
@@ -22,6 +23,7 @@ module.exports = (
 		};
 
 		const route = next_action => {
+			console.log('BOT ROUTE =>', next_action);
 			let args = _queue.shift();
 			let state = args[2];
 
@@ -31,17 +33,33 @@ module.exports = (
 			_queue.push(args);
 			next();
 		};
+
+		const pass = (next_action, response) => {
+			console.log('BOT PASS =>', next_action);
+
+			let args = _queue.shift();
+			let state = args[2];
+
+			args[0] = response;
+			args[1] = state.context || {};
+			args[2].action = next_action;
+
+			_queue.push(args);
+			next();
+		};
 		
 		const next = () => {
+			console.log('BOT NEXT...');
 			if (_queue.length === 0)
-				return;
+				return console.log('BOT WAITING...');
 			
 			_timestamp = Date.now();
 			
 			let [msg, context, state] = _queue[0];
 			state.context = Object.assign(state.context || {}, context);
-
-			// console.log('>>', state.action.toUpperCase());
+			
+			console.log('BOT STEP -->', state.action.toUpperCase());
+			console.log('BOT STEP RECEIVED <--', msg, state);
 
 			actions[state.action](
 				msg,
@@ -50,6 +68,7 @@ module.exports = (
 					[`<error: no responses found for action "${state.action}"`])
 					.map(action => Object.assign(action, {
 						render(model) {
+							console.log('BOT RESPONSE REDNER:', model);
 							return render_response(this, model);
 						}
 					})), {
@@ -58,7 +77,8 @@ module.exports = (
 						}
 					}),
 				send,
-				route
+				route,
+				pass
 			);
 		};
 

@@ -23,15 +23,15 @@ To create custom components for your server, execute `./bot-server create <compo
 Let's walk through building a new component that hooks into other coco and custom components:
 
 ```bash
-	./bot-server create helloworld
-	cd ./bots/helloworld
-	./index # We can run our bots from the command-line
+./bot-server create helloworld
+cd ./bots/helloworld
+./index # We can run our bots from the command-line
 ```
 
 Give that `index` a test! Run `./bot-server start` from the root of the project directory before running `index` so that all
 your other local and CoCo components that your bot uses are available.
 
-#### NOTE:
+### NOTE:
 Once you create your component and run the bot-server, your bot is now available as a component for other components to use!!
 
 ## Customize your bots "actions"
@@ -39,42 +39,42 @@ Once you create your component and run the bot-server, your bot is now available
 In your favourite editor, open `./bots/helloworld/index`.  We should see a node executable like so:
 
 ```javascript
-	'use strict';
+'use strict';
 
-	const {
-		action,
-		bot,
-		bootstrap
-	} = require("../../component");
+const {
+	action,
+	bot,
+	bootstrap
+} = require("../../component");
 
-	const nlp = require('../../nlp');
+const nlp = require('../../nlp');
 
-	// Create a new bot (../../component/bot.js)
-	const component = bot(
-		require("./responses.json"),
-		{
-			// A custom action example:
-			action_name: (msg, state, responses, send, route) => {
-				// Do some stuff with msg then maybe wait for an
-				// API call or asynchronous operation... then call send.
-				send(
-					// Next action name:
-					"action_name",
-					// Response text. These are pulled from ./responses.json
-					responses.random().render({ /* context for rendering variables within text strings */ })
-				);
-			},
+// Create a new bot (../../component/bot.js)
+const component = bot(
+	require("./responses.json"),
+	{
+		// A custom action example:
+		action_name: (msg, state, responses, send, route) => {
+			// Do some stuff with msg then maybe wait for an
+			// API call or asynchronous operation... then call send.
+			send(
+				// Next action name:
+				"action_name",
+				// Response text. These are pulled from ./responses.json
+				responses.random().render({ /* context for rendering variables within text strings */ })
+			);
+		},
 
-			// Example predefined actions (../../component/actions.js):
-			index: action.default("phonenumber"),
-			phonenumber: action.bot("phonenumber", context => "reminder"),
-			reminder: action.bot("reminder", () => "index")
-		});
+		// Example predefined actions (../../component/actions.js):
+		index: action.default("phonenumber"),
+		phonenumber: action.bot("phonenumber", context => "reminder"),
+		reminder: action.bot("reminder", () => "index")
+	});
 
-	// Hooks our bot into the appropriate IO
-	// Terminal: command-prompt style chat
-	// Server: Runs as a forked process
-	bootstrap(component);
+// Hooks our bot into the appropriate IO
+// Terminal: command-prompt style chat
+// Server: Runs as a forked process
+bootstrap(component);
 
 ```
 

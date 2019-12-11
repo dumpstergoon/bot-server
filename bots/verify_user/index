@@ -14,42 +14,25 @@ const component = bot(
 	require("./responses.json"),
 	{
 		index: action.default("confirm"),
-		confirm: action.confirm("ask_email", "goodbye", "exit"),
+		confirm: action.confirm(
+			"ask_email",
+			"verify_cancelled",
+			"not_understood"
+		),
 		ask_email: action.default("verify_email"),
-		verify_email: (msg, state, responses, send, route) => {
-			if (nlp.no.test(msg))
-				return route("exit");
-
-			let email = nlp.email.exec(msg);
-
-			console.log('>>', email);
-			
-			if (email) {
-				state.context.userInfo = {
-					email: email,
-				};
-
-				route("ask_passphrase");
-			} else {
-				route("user_not_found");
-			}
+		verify_email: (msg, state, responses, send, route, pass) => {
+			// TODO: verify the email... then route to "email_verified"
+			route("email_verified");
 		},
-		user_not_found: action.default("verify_email"),
+		email_verified: action.pass("ask_passphrase"),
+		verify_cancelled: action.exit(),
+
 		ask_passphrase: action.default("verify_passphrase"),
-		verify_passphrase: (msg, state, responses, send, route) => {
-			if (nlp.no.test(msg))
-				return route("bad_exit");
-
-			console.log(msg);
-
-			if (msg === "hnn")
-				route("good_exit")
-			else
-				route("passphrase_denied")
+		verify_passphrase: (msg, state, responses, send, route, pass) => {
+			// TODO: verify passphrase... then route to "passphrase_verified"
+			route("passphrase_verified");
 		},
-		passphrase_denied: action.default("verify_passphrase"),
-		good_exit: action.exit(),
-		bad_exit: action.exit()
+		passphrase_verified: action.exit()
 	});
 
 // Hooks our bot into the appropriate IO:

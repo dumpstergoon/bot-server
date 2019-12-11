@@ -1,23 +1,49 @@
 {
 	"index": [
-		"That's great! looks like you're not a verified user... would you like to get started?"
+		"Well hello there. I'd like to help you, but it looks like you're not a verified user... would you like to get started?"
 	],
 	"ask_email": [
-		"So what's your email?"
+		"Great! To begin, I will identify you with your email address."
+	],
+	"ask_email_again": [
+		"Right. Still need an email address from you..."
+	],
+	"ask_email_last_time": [
+		"Alright. Take it seriously now... just give me your email address!!"
+	],
+	"email_denied": [
+		"Ouft. Couldn't find a user with that email address. Try again?",
+		"Email not a match. Have another go."
+	],
+	"email_invalid": [
+		"That's not an email address... go again.",
+		"You having a laugh? Just your email address, please."
+	],
+	"email_verified": [
+		"Awesome. Welcome back, [name]."
 	],
 	"ask_passphrase": [
-		"Great, Graham! And please provide the 1st, 3rd, and 4th letters of your passphrase."
-	],
-	"user_not_found": [
-		"No user found by that email address. Try again."
+		"Now, could you please provide the [index_one], [index_two], and [index_three] letters of your chosen passphrase."
 	],
 	"passphrase_denied": [
-		"Passphrase wasn't a match..."
+		"Passphrase wasn't a match... try again.",
+		"Wanna try that again? Doesn't seem right."
 	],
-	"good_exit": [
-		"You're now verified, Graham!"
+	"passport_denied_twice": [
+		"Hm. Let's try one last time?"
 	],
-	"bad_exit": [
-		"Let's continue as a guest, shall we?"
+
+	"verify_abort": [
+		"How about we continue as a guest? I'm good at answering questions."
+	],
+	"verify_cancelled": [
+		"No sweat, dude. Perhaps I can help you with a questuion you might have?"
+	],
+	"no_email_exit": [
+		"Right... that's fine. We'll just move along 😉️. Feel free to ask me anything and I'll try to help!"
+	],
+	
+	"passphrase_verified": [
+		"You're now verified, [name]! Now we can REALLY get started 💃️"
 	]
 }

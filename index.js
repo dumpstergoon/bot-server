@@ -42,8 +42,6 @@ const local_component = bot => (req, res) => {
 	console.log('Executing component');
 	console.log(`User input: "${req.body.user_input}"`);
 
-	bot.stdout.pipe(process.stdout);
-
 	bot.on('message', function listener(message, _msg = JSON.parse(message)) {
 		console.log('Bot response:', _msg);
 		res.json(_msg);
@@ -67,13 +65,13 @@ readdirSync(BOT_DIR).forEach(name => {
 
 	let bot = fork(
 		`${BOT_DIR}/${name}/index`, // path
-		[
-			/* DEFAULTS when we spin-up...
-			maybe here is where can override default responses... */
-		],
+		[],
 		{
 			stdio: ['pipe', 'pipe', 'pipe', 'ipc']
 		});
+
+	// Get'er piped, bro
+	bot.stdout.pipe(process.stdout);
 
 	app.route(`/${name}/:session_id`).post(local_component(bot));
 });
