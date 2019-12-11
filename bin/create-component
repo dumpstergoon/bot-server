@@ -1,6 +1,9 @@
-#!/bin/bash
+#!/usr/bin/bash
 
-# useful tools:
-PATH=/home/grambo/bin/functions:$PATH
+name=$1
 
-
+cp -r ./bin/component_template ./bots/$name/
+cd ./bots/$name
+git init
+npm install
+cd ../..
