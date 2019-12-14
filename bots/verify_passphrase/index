@@ -1,0 +1,40 @@
+#!/usr/bin/env node
+// @ts-nocheck
+'use strict';
+
+const {
+	action,
+	bot,
+	bootstrap
+} = require("../../component");
+
+const nlp = require('../../nlp');
+
+const component = bot(
+	require("./responses.json"),
+	{
+		// Component entry point...
+		index: (msg, state, responses, send, route) => {
+			// Here, we receive the passphrase sent via the context in the exchangeBody
+			// Based on the length of the string, choose three or four indicies
+			// for the verification...
+			// then store those indicies in the state.
+			console.log('ASK THE PASSPHRASE =>');
+			route("ask_passphrase")
+		},
+		// Pop the question!
+		ask_passphrase: action.default("verify_passphrase"),
+		// Check our passphrase
+		verify_passphrase: (msg, state, responses, send, route, pass) => {
+			// TODO: verify passphrase... then route to "passphrase_verified"
+
+			console.log('PASSPHRASE VERIFIED =>');
+			route("passphrase_verified");
+
+			// If no good, we have an app for that?
+		},
+		passphrase_verified: action.exit(),
+	});
+
+// Hooks our bot into the appropriate IO:
+bootstrap(component);

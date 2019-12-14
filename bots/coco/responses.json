@@ -1,5 +1,8 @@
 {
-	"index": [
+	"welcome_user": [
 		"Hello, [name]. Nice to see you. Well not YOU per se. Just your bits 🤯️"
+	],
+	"exit": [
+		"And that's all folks. Thanks for trying this out. This bot will self destruct now. 🤯️"
 	]
 }

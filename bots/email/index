@@ -9,25 +9,18 @@ const {
 } = require("../../component");
 
 const nlp = require('../../nlp');
-const { info } = require('../../models');
 
 const component = bot(
 	require("./responses.json"),
 	{
-		index: action.default("email"),
-		email: (msg, state, responses, send) => {
-			state.context.userInfo = {
-				email: nlp.email.exec(msg),
-			};
-			send(
-				"exit",
-				responses.random().render({
-					email: state.context.userInfo.email
-				})
-			);
+		index: action.default('verify_email'),
+		verify_email: (msg, state, responses, send, route, pass) => {
+			// TODO: verify the email... then route to "email_verified"
+			// This uses OUR database to check if the user exists :)
+			console.log('VERIFY EMAIL FUNCTION!');
+			route("email_verified");
 		},
-
-		exit: action.exit()
+		email_verified: action.exit()
 	});
 
 // Hooks our bot into the appropriate IO:

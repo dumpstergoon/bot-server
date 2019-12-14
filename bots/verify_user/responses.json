@@ -2,48 +2,16 @@
 	"index": [
 		"Well hello there. I'd like to help you, but it looks like you're not a verified user... would you like to get started?"
 	],
-	"ask_email": [
-		"Great! To begin, I will identify you with your email address."
+	"not_understood": [
+		"Was that a yes?",
+		"Could you answer that again? I'm not even sure if it was English.",
+		"Huh? Did you say yes or no? Yeah or nah? Yup or nope??",
+		"What? Try saying something like \"definitely\" or \"no way, dude.\""
 	],
-	"ask_email_again": [
-		"Right. Still need an email address from you..."
-	],
-	"ask_email_last_time": [
-		"Alright. Take it seriously now... just give me your email address!!"
-	],
-	"email_denied": [
-		"Ouft. Couldn't find a user with that email address. Try again?",
-		"Email not a match. Have another go."
-	],
-	"email_invalid": [
-		"That's not an email address... go again.",
-		"You having a laugh? Just your email address, please."
-	],
-	"email_verified": [
-		"Awesome. Welcome back, [name]."
-	],
-	"ask_passphrase": [
-		"Now, could you please provide the [index_one], [index_two], and [index_three] letters of your chosen passphrase."
-	],
-	"passphrase_denied": [
-		"Passphrase wasn't a match... try again.",
-		"Wanna try that again? Doesn't seem right."
-	],
-	"passport_denied_twice": [
-		"Hm. Let's try one last time?"
-	],
-
 	"verify_abort": [
 		"How about we continue as a guest? I'm good at answering questions."
 	],
 	"verify_cancelled": [
 		"No sweat, dude. Perhaps I can help you with a questuion you might have?"
-	],
-	"no_email_exit": [
-		"Right... that's fine. We'll just move along 😉️. Feel free to ask me anything and I'll try to help!"
-	],
-	
-	"passphrase_verified": [
-		"You're now verified, [name]! Now we can REALLY get started 💃️"
 	]
 }

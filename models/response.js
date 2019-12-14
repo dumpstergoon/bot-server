@@ -4,7 +4,7 @@ module.exports = (
 	state = {},
 	confidence = 1,
 	idontknow = confidence < 0.5,
-	component_done = confidence === 0,
+	component_done = confidence === 10,
 	component_failed = confidence === -1) => {
 	return {
 		response: message,

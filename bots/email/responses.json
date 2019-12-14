@@ -1,9 +1,25 @@
 {
 	"index": [
-		"What is your email address?",
-		"Can I get your email?"
+		"Great! To begin, I will identify you with your email address."
 	],
-	"email": [
-		"Thanks! [email] is a great email address."
+	"ask_email_again": [
+		"Right. Still need an email address from you..."
+	],
+	"ask_email_last_time": [
+		"Alright. Take it seriously now... just give me your email address!!"
+	],
+	"email_denied": [
+		"Ouft. Couldn't find a user with that email address. Try again?",
+		"Email not a match. Have another go."
+	],
+	"email_invalid": [
+		"That's not an email address... go again.",
+		"You having a laugh? Just your email address, please."
+	],
+	"email_verified": [
+		"Awesome. Welcome back, [name]."
+	],
+	"no_email_exit": [
+		"Right... that's fine. We'll just move along 😉️. Feel free to ask me anything and I'll try to help!"
 	]
 }

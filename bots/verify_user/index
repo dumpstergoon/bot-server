@@ -13,27 +13,33 @@ const nlp = require('../../nlp');
 const component = bot(
 	require("./responses.json"),
 	{
+		// Entry point:
 		index: action.default("confirm"),
+		// We're looking for a yes or no here... depending on the answer,
+		// we "route" to the appropriate action:
 		confirm: action.confirm(
-			"ask_email",
+			"email",
 			"verify_cancelled",
 			"not_understood"
 		),
-		ask_email: action.default("verify_email"),
-		verify_email: (msg, state, responses, send, route, pass) => {
-			// TODO: verify the email... then route to "email_verified"
-			console.log('HEREEE');
-			route("email_verified");
-		},
-		email_verified: action.pass("ask_passphrase"),
+		// Call upon our "email" component:
+		email: action.bot('email', (response, state, send, route, pass) => {
+			// TODO: check the state to see if we were successful
+
+			// "pass" allows us to couple this response with the
+			// next action in this conversation flow...
+			pass('verify_passphrase', response);
+		}),
+		// Say we don't understand and then go back to confirm:
+		not_understood: action.default("confirm"),
+		// Exit the component:
 		verify_cancelled: action.exit(),
 
-		ask_passphrase: action.default("verify_passphrase"),
-		verify_passphrase: (msg, state, responses, send, route, pass) => {
-			// TODO: verify passphrase... then route to "passphrase_verified"
-			route("passphrase_verified");
-		},
-		passphrase_verified: action.exit()
+		verify_passphrase: action.bot('verify_passphrase', (response, state, send, route, pass) => {
+			pass('exit', response);
+		}),
+
+		exit: action.exit()
 	});
 
 // Hooks our bot into the appropriate IO:

@@ -8,6 +8,7 @@ const pipe = (list = []) =>
 		{
 			add(func) {
 				list.push(func);
+				return this;
 			}
 		});
 
