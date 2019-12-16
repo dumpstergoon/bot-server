@@ -19,6 +19,6 @@ module.exports = {
 		/\b(one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve)\b/gi,
 	], result => result.slice(1)),
 	email: expression([
-		/([.]+@[.]+\.[a-z]+)/gi
+		/([\w\-]+@[\w\-]+\.[a-z]+)/gi
 	], result => result[0])
 };

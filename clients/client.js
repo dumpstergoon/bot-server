@@ -36,7 +36,6 @@ const Client = endpoint => {
 			return this;
 		},
 		send(message, context = {}) {
-			console.log('CLIENT SEND =>', message, context);
 			request({
 				url: endpoint,
 				method: 'POST',
@@ -45,18 +44,17 @@ const Client = endpoint => {
 					content: context
 				},
 			}, (e, r, b) => {
-				console.log('CLIENT RECEIVE <=');
 				if (e || b.component_failed) {
-					console.log('CLIENT FAILED!', e ? 'NETWORK ERROR' : 'COMPONENT ERROR', e || b);
+					console.error('CLIENT FAILED!', e ? 'NETWORK ERROR' : 'COMPONENT ERROR', e || b);
 					on_failed(endpoint, message, context, b);
 				} else if (b.out_of_context || b.idontknow) {
-					console.log('CLIENT OUT OF CONTEXT OR CONFUSED', b);
+					console.debug('CLIENT OUT OF CONTEXT OR CONFUSED', b);
 					on_stumped(b);
 				} else {
-					console.log('CLIENT COMPONENT RESPONSE', b);
+					console.debug('CLIENT COMPONENT RESPONSE', b);
 					on_response(b);
 					if (b.component_done) {
-						console.log('CLIENT COMPONENT COMPLETE', b);
+						console.debug('CLIENT COMPONENT COMPLETE', b);
 						on_done(b);
 					}
 				}

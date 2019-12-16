@@ -1,4 +1,4 @@
-module.exports = (first, last, title = "") => {
+module.exports = (first = "", last = "", title = "") => {
 	return {
 		firstName: first,
 		lastName: last,

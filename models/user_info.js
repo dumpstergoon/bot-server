@@ -8,7 +8,7 @@ const get_age = (dob, _now = new Date()) => {
 	return years;
 };
 
-module.exports = (email, dob, gender = "", profession = "", description = "") => {
+module.exports = (email = "", dob = new Date(), gender = "", profession = "", description = "") => {
 	return {
 		email: email,
 		birthday: dob,

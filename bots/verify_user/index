@@ -10,6 +10,11 @@ const {
 
 const nlp = require('../../nlp');
 
+const {
+	user,
+	info
+} = require('../../models');
+
 const component = bot(
 	require("./responses.json"),
 	{
@@ -24,10 +29,7 @@ const component = bot(
 		),
 		// Call upon our "email" component:
 		email: action.bot('email', (response, state, send, route, pass) => {
-			// TODO: check the state to see if we were successful
-
-			// "pass" allows us to couple this response with the
-			// next action in this conversation flow...
+			console.log('VERIFY USER COMPONENT', state.context);
 			pass('verify_passphrase', response);
 		}),
 		// Say we don't understand and then go back to confirm:
@@ -36,6 +38,19 @@ const component = bot(
 		verify_cancelled: action.exit(),
 
 		verify_passphrase: action.bot('verify_passphrase', (response, state, send, route, pass) => {
+			// Add a fake user:
+			state.context.user = user(
+				'Graham',
+				'Robertson',
+				'Mr.'
+			);
+			state.context.userInfo = info(
+				state.context.userInfo.email,
+				new Date('1988-09-14'),
+				'brogrammer',
+				'Software Guru',
+				'Nice enough.'
+			);
 			pass('exit', response);
 		}),
 

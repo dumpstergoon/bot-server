@@ -2,13 +2,10 @@
 
 module.exports = bot => {
 	if (process.send) {
-		console.log("BOOTSTRAP: PROCESS STARTED.");
 		bot.send = response => {
-			console.log("BOOTSTRAP: SEND =>", response);
 			process.send(JSON.stringify(response));
 		};
 		process.on('message', (message, payload = JSON.parse(message)) => {
-			console.log("BOOTSTRAP: RECEIVE <=", payload);
 			bot.receive(payload.session_id, payload.user_input, payload.context);
 		});
 	} else {

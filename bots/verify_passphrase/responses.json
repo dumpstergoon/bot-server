@@ -1,15 +1,13 @@
 {
 	"ask_passphrase": [
-		"Now, could you please provide the [index_one], [index_two], and [index_three] letters of your chosen passphrase."
+		"Type the [index_one], [index_two], and [index_three] letters of your chosen passphrase. Enter this on its own as one word. (demo passphrase: 'hannah')"
 	],
 	"passphrase_denied": [
 		"Passphrase wasn't a match... try again.",
-		"Wanna try that again? Doesn't seem right."
-	],
-	"passport_denied_twice": [
-		"Hm. Let's try one last time?"
+		"Didn't quite get that."
 	],
 	"passphrase_verified": [
-		"You're now verified, [name]! Now we can REALLY get started 💃️"
+		"Thank you! Password has been verified.",
+		"Brilliant. You have been verified."
 	]
 }

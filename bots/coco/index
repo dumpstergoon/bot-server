@@ -15,24 +15,16 @@ const component = bot(
 	require("./responses.json"),
 	{
 		index: (msg, state, responses, send, route) => {
-			// Right, soo we'll have received some message like hello...
-
-			// TODO: check if they ask how we're doing...
-			// If so, ask back...
-
-			// Do some basic small-talk interaction...
-			// once complete, take user to the "menu"
-
 			if (state.context.user)
 				route("welcome_user");
 			else
 				route("verify_user");
 		},
-		welcome_user: action.default("index"),
+		welcome_user: action.exit(), // We never made anything past this...
 
 		// Call upon our "verify user" component:
 		verify_user: action.bot("verify_user", (response, state, send, route, pass) => {
-			pass("exit", response);
+			pass("welcome_user", response);
 		}),
 
 		// Exit for now... TODO: continue to rest of the app.

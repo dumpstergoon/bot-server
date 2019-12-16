@@ -1,8 +1,21 @@
 // @ts-nocheck
-const render_response = (template, model) => {
-	console.log('BOT RENDER RESPONSE', template, model);
-	return template.replace(/\[([*]+)\]/gi, match => model[match] || `<error: "${match}" not defined>`);
+const name_trim = match =>
+	match.substr(1, match.length - 2);
+
+const transform_model = (model = {}) => {
+	let time = new Date().getHours();
+	return Object.assign({
+		name: model.user ? model.user.fristName : '<no_name_found>',
+		fullname: model.user ? model.user.firstName + ' ' + model.user.lastName : '<no_name_found>',
+		email: model.userInfo ? model.userInfo.email : '<no_email_found>',
+		time_of_day: time >= 17 ? 'evening' :
+			(time >= 12 ? 'afternoon' :
+				(time >= 5 ? 'morning' : 'evening')),
+	}, model);
 };
+
+const render_response = (template, model, _model = transform_model(model)) =>
+	template.replace(/\[[\w]+\]/gi, match => _model[name_trim(match)] || '[]');
 
 const { response } = require('../models');
 
@@ -57,9 +70,8 @@ module.exports = (
 		};
 		
 		const next = () => {
-			console.log('>>>> BOT NEXT...');
 			if (_queue.length === 0)
-				return console.log('...BOT WAITING <<<<');
+				return;
 			
 			_timestamp = Date.now();
 			

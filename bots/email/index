@@ -8,6 +8,10 @@ const {
 	bootstrap
 } = require("../../component");
 
+const {
+	info
+} = require('../../models');
+
 const nlp = require('../../nlp');
 
 const component = bot(
@@ -15,11 +19,14 @@ const component = bot(
 	{
 		index: action.default('verify_email'),
 		verify_email: (msg, state, responses, send, route, pass) => {
-			// TODO: verify the email... then route to "email_verified"
-			// This uses OUR database to check if the user exists :)
-			console.log('VERIFY EMAIL FUNCTION!');
-			route("email_verified");
+			let email = nlp.email.exec(msg)[0];
+			if (email) {
+				state.context.userInfo = info(email);
+				route("email_verified");
+			} else
+				route("email_invalid");
 		},
+		email_invalid: action.default("verify_email"),
 		email_verified: action.exit()
 	});
 
