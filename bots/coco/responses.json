@@ -1,8 +1,8 @@
 {
 	"welcome_user": [
-		"Welcome, [fullname]. How may I be of service?"
+		"Good [time_of_day], [fullname]. How may I be of service?"
 	],
 	"exit": [
-		"And that's all folks. Thanks for trying this out. This bot will self destruct now. 🤯️"
+		"***** And that's all folks. Thanks for trying this out. This bot will self destruct now. 🤯️ *****"
 	]
 }

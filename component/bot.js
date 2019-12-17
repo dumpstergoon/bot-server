@@ -6,7 +6,7 @@ const transform_model = (model = {}) => {
 	let time = new Date().getHours();
 	return Object.assign({
 		name: model.user ? model.user.fristName : '<no_name_found>',
-		fullname: model.user ? model.user.firstName + ' ' + model.user.lastName : '<no_name_found>',
+		fullname: model.user ? `${model.user.title} ${model.user.firstName} ${model.user.lastName}` : '<no_name_found>',
 		email: model.userInfo ? model.userInfo.email : '<no_email_found>',
 		time_of_day: time >= 17 ? 'evening' :
 			(time >= 12 ? 'afternoon' :

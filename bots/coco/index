@@ -20,14 +20,14 @@ const component = bot(
 			else
 				route("verify_user");
 		},
-		welcome_user: action.exit(), // We never made anything past this...
+		welcome_user: action.default("welcome_user"), // We never made anything past this... so LOOP for now...
 
 		// Call upon our "verify user" component:
 		verify_user: action.bot("verify_user", (response, state, send, route, pass) => {
 			pass("welcome_user", response);
 		}),
 
-		// Exit for now... TODO: continue to rest of the app.
+		// LOOP for now... TODO: continue to rest of the app.
 		exit: action.exit()
 	});
 
