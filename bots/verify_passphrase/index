@@ -66,7 +66,6 @@ const component = bot(
 					letter
 				]
 			});
-			console.log(state.indices);
 			Object.assign(state.context, {
 				// TODO: TO BE GENERATED IN INDEX FUNCTION
 				index_one: INDICES[state.indices[0][0]],
@@ -80,7 +79,6 @@ const component = bot(
 		ask_passphrase: action.default("verify_passphrase"),
 		// Check our passphrase
 		verify_passphrase: (msg, state, responses, send, route, pass) => {
-			console.log('VERIFY >>', msg);
 			if (verify(msg, state.indices)) {
 				state.context.passphrase_verified = true;
 				route("passphrase_verified");
@@ -89,6 +87,7 @@ const component = bot(
 		},
 		password_denied: action.pass("ask_passphrase"),
 		passphrase_verified: action.exit(),
+		exit: action.exit("VERIFY_PASSPHRASE COMPONENT COMPLETE")
 	});
 
 // Hooks our bot into the appropriate IO:

@@ -49,9 +49,9 @@ module.exports = {
 			pass(next_action, responses.random().render(state.context))
 		}
 	},
-	exit: () => {
+	exit: (response = "") => {
 		return (msg, state, responses, send) => {
-			send("", responses.random().render(state.context), true);
+			send("exit", response + ' ' + responses.random().render(state.context), true);
 			if (!process.send)
 				process.exit(0);
 		};

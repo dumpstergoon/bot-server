@@ -65,7 +65,7 @@ const local_component = bot => (req, res) => {
 console.log('\n========================================');
 Object.entries(REMOTE_BOTS).forEach(([name, description]) => {
 	console.log(`Routing "localhost:${port}/${name}" to uri ${description.url}`);
-	app.route(`/${name}/:session_id`).post(remote_component(description));
+	app.route(`/exchange/${name}/:session_id`).post(remote_component(description));
 });
 console.log('>>');
 readdirSync(BOT_DIR).forEach(name => {
@@ -81,6 +81,6 @@ readdirSync(BOT_DIR).forEach(name => {
 	// Get'er piped, bro
 	bot.stdout.pipe(process.stdout);
 
-	app.route(`/${name}/:session_id`).post(local_component(bot));
+	app.route(`/exchange/${name}/:session_id`).post(local_component(bot));
 });
 console.log('========================================\n');
