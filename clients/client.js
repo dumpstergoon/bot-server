@@ -41,7 +41,7 @@ const Client = endpoint => {
 				method: 'POST',
 				json: {
 					user_input: message,
-					content: context
+					context: context
 				},
 			}, (e, r, b) => {
 				if (e || b.component_failed) {

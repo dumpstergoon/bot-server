@@ -49,16 +49,18 @@ const component = bot(
 	{
 		// Component entry point...
 		index: (msg, state, responses, send, route) => {
+			console.log('___', state.context);
 			let passphrase =
 				state.context.passphrase =
 					state.context.passphrase || 'hannah';
-			
+			console.log(passphrase);
 			let chunk_size = passphrase.length / 3;
 			let groups = chunkify(
 				passphrase,
 				chunk_size
 			);
 			
+			state.context.passphrase_verified = false;
 			state.indices = groups.map((letters, index, groups) => {
 				let [pos, letter] = rand_item(letters);
 				return [

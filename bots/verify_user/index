@@ -29,6 +29,8 @@ const component = bot(
 		),
 		// Call upon our "email" component:
 		email: action.bot('email', (response, state, send, route, pass) => {
+			// FAKE PASSPHRASE:
+			//state.context.passphrase = 'apples';
 			console.log('VERIFY USER COMPONENT', state.context);
 			pass('verify_passphrase', response);
 		}),
