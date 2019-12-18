@@ -11,14 +11,22 @@ const {
 const nlp = require('../../nlp');
 const data = require("./data.json");
 
+const { user } = require('../../models');
+
 const component = bot(
 	require("./responses.json"),
 	{
 		index: (msg, state, responses, send, route) => {
 			if (state.context.user)
 				route("welcome_user");
-			else
+			else {
+				state.context.user = user(
+					'human',
+					'being',
+					'nameless'
+				)
 				route("verify_user");
+			}
 		},
 		welcome_user: action.default("welcome_user"), // We never made anything past this... so LOOP for now...
 
@@ -28,7 +36,7 @@ const component = bot(
 		}),
 
 		// LOOP for now... TODO: continue to rest of the app.
-		exit: action.exit()
+		exit: action.exit("COCO COMPONENT COMPLETE.")
 	});
 
 // Hooks our bot into the appropriate IO:

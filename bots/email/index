@@ -27,7 +27,8 @@ const component = bot(
 				route("email_invalid");
 		},
 		email_invalid: action.default("verify_email"),
-		email_verified: action.exit()
+		email_verified: action.exit(),
+		exit: action.exit("EMAIL COMPONENT COMPLETE.")
 	});
 
 // Hooks our bot into the appropriate IO:
