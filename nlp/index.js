@@ -3,11 +3,9 @@ module.exports = {
 	create: expression,
 	yes: expression([
 		/^y$/i,
-		/yes|yep|yeah|yup|ye/i,
-		/totally|definitely|absolutely|defo/i,
-		/sure|go/i,
-		/please/i,
-		/oui|aye|si/i,
+		/yess|yep|yeah|yup|yar|okie|doke|dokie|sure/i,
+		/\b(yes|ye|dope|yeh|ok|okay|go|totally|definitely|absolutely|defo|please|pls|oui|aye|si|ouais)\b/i,
+		/why not/i,
 	]),
 	no: expression([
 		/^n$/i,

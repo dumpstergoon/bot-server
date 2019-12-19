@@ -7,7 +7,7 @@
 		"Didn't quite get that."
 	],
 	"passphrase_verified": [
-		"Thank you! Password has been verified.",
-		"Brilliant. You have been verified."
+		"Thank you! Your passphrase has been verified.",
+		"Brilliant. [email] been verified."
 	]
 }

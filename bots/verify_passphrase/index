@@ -42,7 +42,7 @@ const chunkify = (string = "", chunk_size = 2, output = []) => {
 };
 
 const verify = (passed, indices) =>
-	indices.map(([index, letter]) => letter).join('') === passed;
+	indices.map(([index, letter]) => letter).join('').toLowerCase() === passed.toLowerCase();
 
 const component = bot(
 	require("./responses.json"),
