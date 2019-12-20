@@ -4,7 +4,8 @@
 	],
 	"passphrase_denied": [
 		"Passphrase wasn't a match... try again.",
-		"Didn't quite get that."
+		"Didn't quite get that.",
+		"Just the [index_one], [index_two], and [index_three] letters only please."
 	],
 	"passphrase_verified": [
 		"Thank you! Your passphrase has been verified for [email].",

@@ -9,7 +9,7 @@ module.exports = (
 	return {
 		response: message,
 		response_time: (Date.now() - _timestamp) / 1000,
-		confidence: confidence,
+		confidence: Math.max(0, Math.min(1, confidence)),
 		idontknow: idontknow,
 		out_of_context: idontknow,
 		component_done: component_done,
