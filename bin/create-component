@@ -1,9 +1,0 @@
-#!/bin/bash
-
-name=$1
-
-cp -r ./bin/component_template ./bots/$name/
-cd ./bots/$name
-#git init
-npm install
-cd ../..

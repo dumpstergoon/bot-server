@@ -1,12 +1,8 @@
 {
   "name": "bot-server",
-  "version": "1.0.0",
-  "description": "A server for pointing to chat-bot components",
+  "version": "2.0.0",
+  "description": "Chat bot server that routes exchange requests to local or remote services or APIs",
   "main": "index.js",
-  "dependencies": {
-    "express": "^4.17.1",
-    "request": "^2.88.0"
-  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -14,10 +10,24 @@
     "type": "git",
     "url": "git+https://dumpstergoon@github.com/dumpstergoon/bot-server.git"
   },
-  "author": "Graham Robertson",
+  "keywords": [
+    "bot",
+    "chat",
+    "chatbot",
+    "ai",
+    "component"
+  ],
+  "author": "Graham Robertson - SkyCrate Ltd",
   "license": "Unlicense",
   "bugs": {
     "url": "https://github.com/dumpstergoon/bot-server/issues"
   },
-  "homepage": "https://github.com/dumpstergoon/bot-server#readme"
+  "homepage": "https://github.com/dumpstergoon/bot-server#readme",
+  "dependencies": {
+    "ejs": "^3.0.1",
+    "express": "^4.17.1",
+    "express-ejs-layouts": "^2.5.0",
+    "request": "^2.88.0",
+    "zeromq": "^6.0.0-beta.6"
+  }
 }

@@ -1,0 +1,23 @@
+#!/usr/bin/env node
+// @ts-nocheck
+'use strict';
+
+// Spawn/fork our two processes. Since they are node processes, we will
+// create forks so we can send updates between the threads.
+
+const { fork } = require('child_process');
+
+const init = name => fork(
+	`./${name}`,
+	[],
+	{
+		stdio: ['pipe', 'pipe', 'pipe', 'ipc']
+	}
+);
+
+const registry  = init("registry");
+const server = init("server");
+
+registry.on('message', bot_info =>
+	server.send(bot_info));
+
