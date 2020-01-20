@@ -1,0 +1,20 @@
+{
+	"host": "http://localhost:8080/exchange",
+	"uri": "ipc://@skycrate-verify-passphrase",
+	"id": "skycrate-verify-passphrase",
+	"name": "Verify Passphrase",
+	"vendor": "SkyCrate Ltd.",
+	"version": "1.0.0-rc",
+	"author": "Graham Robertson",
+	"description": "Verify Passphrase is used to aid in the verification of a user's identity by testing their knowledge of a previously stored passphrase. The user is asked to identity three letters contained in the passphrase.",
+	"languages": [
+		{
+			"language": "English",
+			"regions": [
+				"en-gb",
+				"en-ca",
+				"en-us"
+			]
+		}
+	]
+}

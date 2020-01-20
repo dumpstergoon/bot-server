@@ -1,0 +1,21 @@
+{
+	"ask_passphrase": [
+		"Type the [index_one], [index_two], and [index_three] letters of your chosen passphrase. Enter this on its own as one word.",
+		"Enter as a single word the [index_one], [index_two], and [index_three] letters of your stored passphrase."
+	],
+	"passphrase_denied": [
+		"Passphrase wasn't a match... try again.",
+		"Didn't quite get that.",
+		"Just the [index_one], [index_two], and [index_three] letters only please."
+	],
+	"passphrase_verified": [
+		"Thank you! Your passphrase has been verified.",
+		"Brilliant. That's a match!"
+	],
+	"forced_exit": [
+		"Sorry. We cannot verify your passphrase this [time_of_day]."
+	],
+	"exit": [
+		"Ok. Let's forget about the passphrase."
+	]
+}

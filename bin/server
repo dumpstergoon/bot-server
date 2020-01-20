@@ -1,5 +1,41 @@
 #!/usr/bin/env node
+// @ts-nocheck
 'use strict';
 
-const express = require('express');
+// TODO: phase-out express and implement HTTPS and Web Sockets
+// with ØMQ. This is a massive task but well worth it. We can
+// keep our dependencies super-low and leverage all sorts of
+const VIEWS = '../views'; // TODO: pull this from a config file
+// networking from one endpoint.
+const express = require('express'),
+		app = express(),
+		protocol = 'insecure',
+		port = process.env.PORT || 8080,
+		domain = process.env.DOMAIN || 'localhost',
+		secure = string => protocol === 'secure' ? string : '';
+const express_websockets = require('express-ws')(app);
+const zengine = require('../../zengine');
+const render = zengine.init({
+	directory: VIEWS
+}).layout('layout', {
+	secure: secure,
+	domain: domain,
+	port: port,
+	http_protocol: `http${ secure('s') }://`,
+	socket_protocol: `ws${ secure('s') }://`,
+	endpoint: `${ domain }:${ port }/exchange`
+});
 
+const ben = require('../index');
+
+app.engine('jst', zengine.express(render));
+app.set('views', VIEWS);
+app.set('view engine', 'jst');
+
+app.use(express.json());
+app.use(express.urlencoded({
+	extended: true
+}));
+
+app.listen(port);
+ben.init(app, port);

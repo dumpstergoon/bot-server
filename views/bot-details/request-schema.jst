@@ -1,0 +1,3 @@
+<h3>POST Request / Web Socket Message</h3>
+${ render("schema/object-detail", item) }
+${ iterate(filter(item.properties, x => x.type === "object"), "schema/object-detail") }

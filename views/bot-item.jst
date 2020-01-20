@@ -1,0 +1,15 @@
+<li>
+	<h2><a href="/exchange/${ item.id }">${ item.name }</a></h2>
+	<h4>${ item.vendor }</h4>
+	<h5>v${ item.version }</h5>
+
+	<p>
+		${ item.description }
+	</p>
+
+	<h5>Supported Languages</h5>
+	<ul>
+		${ iterate(item.languages, "bot-details/bot-language-item") }
+	</ul>
+	<br />
+</li>

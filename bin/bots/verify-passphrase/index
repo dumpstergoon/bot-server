@@ -1,0 +1,17 @@
+#!/usr/bin/env node
+// @ts-nocheck
+'use strict';
+
+const {
+	bot
+} = require('../../../component');
+
+// TODO: Need to make this a little more synchronous...
+bot.init(
+	require("./config.json"),
+	require("./responses.json"),
+	require("./schema.json"),
+	{
+		// This is where we work our magique...
+	}
+);
