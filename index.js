@@ -25,7 +25,7 @@ const send = async (bot_id, message) => {
 		return models.BotNotFoundReply(bot_id);
 	
 	let socket = new ømq.Request;
-	socket.connect(bot.config.uri);
+	socket.connect(bot.uri);
 	await socket.send(stringify(message));
 	return parse(await socket.receive());
 };
@@ -116,7 +116,7 @@ module.exports = {
 				session_id = req.params.session_id) => {
 				
 				ws.on('message', async msg => {
-					ws.send(await bot_exchange(bot_id, session_id, msg.user_input || "", msg.context || {}));
+					ws.send(JSON.stringify(await bot_exchange(bot_id, session_id, msg.user_input || "", msg.context || {})));
 				});
 			});
 

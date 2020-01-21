@@ -1,11 +1,43 @@
-<h1>{ bot.name }</h1>
-<h2>@ ${ session_id }</h2>
+<script>hljs.initHighlightingOnLoad();</script>
 
-<a href="/exchange/${ bot.id }">&lt; ${ bot.name } Details</a>
+<h1>${ item.bot.name } Component Bodge</h1>
+<h3>${ item.bot.vendor } - ${ item.bot.author }</h3>
+<h4><a href="${
+	http_protocol + endpoint }/${ item.bot.id }/${ item.session_id
+}"><code>
+	${ http_protocol + endpoint }/${ item.bot.id }/${ item.session_id }
+</code></a></h4>
+<button onclick="location.href='${ http_protocol + endpoint }/${ item.bot.id }/${ uuid() }'">Generate New Session</button>
+<hr />
+<a href="/exchange">Bot Exchange Network (B.E.N) Listing</a>&nbsp;|&nbsp;<a href="/exchange/${ item.bot.id }">${ item.bot.id } v${ item.bot.version }</a>&nbsp;|&nbsp;<b>${ item.session_id }</b>
+<hr />
 
-<p>
-	TODO: Embed a chatbot user interface here...
-	keep'er simple. Also want to be able to customize things like a sandbox...
-</p>
+<h3>${ item.session_id } @ ${ item.bot.uri } v${ item.bot.version }</h3>
 
-<a href="/exchange/<%= bot.id %>">&lt; Back</a>
+<div id="chat_window"></div>
+<div id="chat_controls">
+	<input id="user_input" type="text" />
+	<button id="send_btn">send</button>
+</div>
+
+<hr />
+<a href="/exchange/${ item.bot.id }">&lt; Back</a>
+
+<script type="text/javascript">
+	const ENDPOINT = '${ socket_protocol + endpoint }/${ item.bot.id }/${ item.session_id }';
+	const SEND_BTN = document.getElementById('send_btn');
+	const USER_INPUT = document.getElementById('user_input');
+
+	const ws = new WebSocket(ENDPOINT);
+
+	ws.addEventListener('message', (e, msg = JSON.parse(e.data)) => {
+		console.log('Message Received', msg);
+	});
+
+	SEND_BTN.addEventListener('click', e => {
+		ws.send(JSON.stringify({
+			user_input: USER_INPUT.value,
+		}));
+		USER_INPUT.value = '';
+	}, false);
+</script>

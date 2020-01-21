@@ -20,6 +20,9 @@ const to_definition = (obj, map = to_map(obj)) => {
 const create = (properties = {}, prototype = {}) =>
 	Object.create(prototype, to_definition(properties));
 
+const uuid_part = () =>
+	("000" + ((Math.random() * 46656) | 0).toString(36)).slice(-3);
+
 module.exports = {
 	to_map: to_map,
 	to_object: to_object,
@@ -27,5 +30,10 @@ module.exports = {
 	create: create,
 	parse: req => JSON.parse(req[0]),
 	stringify: msg => JSON.stringify(msg, null, 2),
-	validate: (obj, schema) => true
+	validate: (obj, schema) => true,
+	generate_uuid: (_parts = 4, _output = "") => {
+		for (let i = 0; i < _parts; i++)
+			_output += uuid_part();
+		return _output;
+	}
 };
