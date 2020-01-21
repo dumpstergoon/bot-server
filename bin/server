@@ -23,7 +23,8 @@ const render = zengine.init({
 	port: port,
 	http_protocol: `http${ secure('s') }://`,
 	socket_protocol: `ws${ secure('s') }://`,
-	endpoint: `${ domain }:${ port }/exchange`
+	endpoint: `${ domain }:${ port }/exchange`,
+	uuid: require('../utils').generate_uuid
 });
 
 const ben = require('../index');
