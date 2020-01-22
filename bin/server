@@ -8,12 +8,12 @@
 const VIEWS = '../views'; // TODO: pull this from a config file
 // networking from one endpoint.
 const express = require('express'),
-		app = express(),
 		protocol = 'insecure',
 		port = process.env.PORT || 8080,
 		domain = process.env.DOMAIN || 'localhost',
 		secure = string => protocol === 'secure' ? string : '';
-const express_websockets = require('express-ws')(app);
+const express_websockets = require('express-ws')(express());
+const app = express_websockets.app;
 const zengine = require('../../zengine');
 const render = zengine.init({
 	directory: VIEWS
@@ -39,4 +39,7 @@ app.use(express.urlencoded({
 }));
 
 app.listen(port);
-ben.init(app, port);
+app.use(
+	"/exchange",
+	ben.init(express.Router(), express_websockets)
+);

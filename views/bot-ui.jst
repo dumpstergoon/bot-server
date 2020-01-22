@@ -2,42 +2,103 @@
 
 <h1>${ item.bot.name } Component Bodge</h1>
 <h3>${ item.bot.vendor } - ${ item.bot.author }</h3>
-<h4><a href="${
-	http_protocol + endpoint }/${ item.bot.id }/${ item.session_id
-}"><code>
-	${ http_protocol + endpoint }/${ item.bot.id }/${ item.session_id }
-</code></a></h4>
-<button onclick="location.href='${ http_protocol + endpoint }/${ item.bot.id }/${ uuid() }'">Generate New Session</button>
+<h4>
+	<a href="/exchange/${ item.id }/${ item.session_id}">
+		<code>${ http_protocol + endpoint }/<br />${ item.id }/<br />${ item.session_id }</code>
+	</a>
+</h4>
+<button onclick="location.href='/exchange/${ item.id }/${ uuid() }'">Generate New Session</button>
 <hr />
-<a href="/exchange">Bot Exchange Network (B.E.N) Listing</a>&nbsp;|&nbsp;<a href="/exchange/${ item.bot.id }">${ item.bot.id } v${ item.bot.version }</a>&nbsp;|&nbsp;<b>${ item.session_id }</b>
+<a href="/exchange">Bot Exchange Network</a>&nbsp;|&nbsp;<a href="/exchange/${ item.id }">${ item.bot.id } | ${ item.instance_id }</a>&nbsp;|&nbsp;<b>session:</b> ${ item.session_id }
 <hr />
 
-<h3>${ item.session_id } @ ${ item.bot.uri } v${ item.bot.version }</h3>
+<h6><code>${ socket_protocol + endpoint }/<br />${ item.bot.id }/${ item.session_id }</code></h6>
 
-<div id="chat_window"></div>
+<ol id="chat_window"></ol>
 <div id="chat_controls">
 	<input id="user_input" type="text" />
 	<button id="send_btn">send</button>
 </div>
 
 <hr />
-<a href="/exchange/${ item.bot.id }">&lt; Back</a>
+<a href="/exchange/${ item.id }">&lt; Back</a>
 
 <script type="text/javascript">
-	const ENDPOINT = '${ socket_protocol + endpoint }/${ item.bot.id }/${ item.session_id }';
+	const ENDPOINT = '${ socket_protocol }' + location.host + '/exchange/${ item.id }/${ item.session_id }';
 	const SEND_BTN = document.getElementById('send_btn');
 	const USER_INPUT = document.getElementById('user_input');
+	const CHAT_WINDOW = document.getElementById('chat_window');
+	const ENTER_KEY = "Enter";
 
 	const ws = new WebSocket(ENDPOINT);
+	const chat = (el => {
+		let attempt = localStorage.getItem(ENDPOINT);
 
-	ws.addEventListener('message', (e, msg = JSON.parse(e.data)) => {
-		console.log('Message Received', msg);
-	});
+		const log = attempt ? JSON.parse(attempt) : [];
+		const create = (type, msg, time) => {
+			let bubble = document.createElement('li');
+			bubble.className = type;
 
-	SEND_BTN.addEventListener('click', e => {
+			let label = document.createElement('label');
+			label.innerText = type + ':';
+
+			let text = document.createElement('span');
+			text.innerText = msg;
+			if (type === 'bot')
+				text.innerText += ' (' + time + 's)';
+			
+			bubble.appendChild(label);
+			bubble.appendChild(text);
+
+			el.appendChild(bubble); 
+			el.scrollTop = el.scrollHeight;
+		};
+
+		log.forEach(x => create(x.type, x.msg, x.time));
+		
+		return {
+			push(type, msg, time = 0) {
+				log.push({
+					type: type,
+					msg: msg,
+					time: time
+				});
+				localStorage.setItem(ENDPOINT, JSON.stringify(log));
+				create(type, msg, time);
+			},
+			send(msg) {
+				this.push('user', msg)
+			},
+			receive(msg, time) {
+				this.push('bot', msg, time);
+			}
+		};
+	})(CHAT_WINDOW);
+
+	const send_event = e => {
+		chat.send(USER_INPUT.value);
+		
 		ws.send(JSON.stringify({
 			user_input: USER_INPUT.value,
 		}));
+		
 		USER_INPUT.value = '';
+	};
+
+	ws.addEventListener('message', (e, msg = JSON.parse(e.data)) => {
+		console.log('Message Received', msg);
+		if (msg.user_input)
+			chat.send(msg.user_input);
+		else
+			chat.receive(msg.response, msg.response_time);
+	});
+
+	USER_INPUT.addEventListener('keyup', e => {
+		if (e.key === ENTER_KEY) {
+			send_event(e);
+			return false;
+		}
 	}, false);
+
+	SEND_BTN.addEventListener('click', send_event, false);
 </script>

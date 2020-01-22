@@ -47,21 +47,15 @@
         "properties": {
           "index_one": {
             "description": "Describes the position of the first requested letter from the passphrase (eg. \"1st\").",
-            "type": [
-              "integer"
-            ]
+            "type": "integer"
           },
           "index_two": {
             "description": "Describes the position of the second requested letter from the passphrase (eg. \"3rd\").",
-            "type": [
-              "integer"
-            ]
+            "type": "integer"
           },
           "index_three": {
             "description": "Describes the position of the third requested letter from the passphrase (eg. \"6th\").",
-            "type": [
-              "integer"
-            ]
+            "type": "integer"
           },
           "time_of_day": {
             "description": "Depending on the current time, this value can be <em>\"morning\"</em>, <em>\"afternoon\"</em>, or <em>\"evening\"</em>.",
@@ -85,28 +79,18 @@
             "properties": {
               "passphrase": {
                 "description": "A secret passphrase used to test a user's identity. Passphrase should be between 6 and 12 characters long but the only real limit is a minimum of 3 characters.",
-                "type": [
-                  "string"
-                ]
+                "type": "string"
               },
               "max_attempts": {
                 "description": "<b>Optional.</b> Number of failed password attempts before the bot finishes and reports it has failed.<br /><br />Defaults to 3.",
-                "type": [
-                  "integer",
-                  "null"
-                ]
+                "type": "integer"
               },
               "datetime": {
                 "description": "<b>Optional.</b> Provide context for the time of day. Can be used in responses: <code>\"Good [time_of_day]!\"</code>.<br /><br />Where <code>[time_of_day]</code> has the values <em>\"morning\"</em>, <em>\"afternoon\"</em>, and <em>\"evening\"</em> depending on the time provided.<br /><br />Defaults to current UTC time.",
-                "type": [
-                  "date",
-                  "null"
-                ]
+                "type": "date"
               }
             },
-            "required": [
-              "passphrase"
-            ]
+            "required": "passphrase"
           }
         },
         "required": [
@@ -158,7 +142,7 @@
             "description": "Any updated or new data from the bot.",
             "type": "object",
             "properties": {
-              "passphrase_verified": {
+              "verified": {
                 "description": "<code>True</code> when the passphrase has been verified. You can use <code>component_done</code> and <code>component_failed</code> in lieu of this. Other components this may not be the case so it's good practice to have an explicit \"goal-accomplished\" boolean. We might have a few sub-goals or outcomes within one bot.",
                 "type": "boolean"
               }

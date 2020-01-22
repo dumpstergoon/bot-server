@@ -14,9 +14,9 @@
 				color:#4e4e4e;
 				background-color:rgb(249, 251, 252);
 				font-family:'Open Sans', Arial, Helvetica, sans-serif;
-				font-size:12pt;
+				font-size:11pt;
 				margin:20pt auto;
-				padding:0pt 20pt;
+				padding:0pt 10pt;
 				max-width:720px;
 			}
 
@@ -48,15 +48,15 @@
 			}
 
 			h4 {
-				font-size:14pt;
-			}
-
-			h5 {
 				font-size:13pt;
 			}
 
-			h6 {
+			h5 {
 				font-size:12pt;
+			}
+
+			h6 {
+				font-size:11pt;
 			}
 
 			a {
@@ -75,7 +75,7 @@
 			p {
 				color:#666;
 				line-height:1.75em;
-				margin:2em 0.5em;
+				margin:2em 0;
 			}
 
 			input[type="text"] {
@@ -132,6 +132,7 @@
 				color: #f2777a;
 			}
 
+			.user,
 			pre > code .hljs-number,
 			pre > code .hljs-built_in,
 			pre > code .hljs-literal,
@@ -139,12 +140,14 @@
 				color: #f99157;
 			}
 
+			.bot,
 			pre > code .hljs-string,
 			pre > code .hljs-value,
 			pre > code .hljs-inheritance {
 				color: #99cc99;
 			}
 
+			
 			pre > code .hljs-function,
 			pre > code .hljs-title {
 				color:#6699cc;
@@ -160,16 +163,18 @@
 				color: #cccccc;
 				line-height:1.5em;
 				padding:10pt 10pt 15pt 20pt;
+				font-size:9pt;
 			}
 
 			table {
 				border-collapse:collapse;
 				margin:30pt 0;
 				width:100%;
+				font-size:10pt;
 			}
 
 			th, td {
-				padding:10pt 15pt;
+				padding:7pt 10pt;
 			}
 
 			td:nth-child(even) {
@@ -181,7 +186,6 @@
 				border-right:1px solid #aeaeae;
 				text-align:right;
 				font-weight:bold;
-				padding-left:15pt;
 			}
 
 			th.type,
@@ -193,7 +197,7 @@
 			td.description {
 				border-left:1px solid #aeaeae;
 				text-align:left;
-				padding-right:10pt;
+				padding-right:5pt;
 			}
 
 			td.property {
@@ -214,10 +218,47 @@
 				display:block;
 				background:#2d2d2d;
 				color:#cccccc;
-				line-height:1.5em;
-				padding:10pt 10pt 15pt 20pt;
+				line-height:1.75em;
+				padding:7pt 0 10pt;
+				font-family:monospace;
 				min-height:40vh;
 				max-height:50vh;
+				list-style:none;
+
+				overflow-x:hidden;
+				overflow-y:auto;
+			}
+
+			#chat_window li {
+				display:block;
+				margin:0;
+				padding:7pt 0;
+			}
+
+			#chat_window li::after {
+				content:".";
+				display:block;
+				height:0;
+				visibility:hidden;
+				clear:both;
+			}
+
+			#chat_window li.bot {
+				background-color:rgba(255, 255, 255, 0.13);
+			}
+
+			#chat_window label {
+				float:left;
+				color:#ccc;
+				font-weight:bold;
+				padding-right:7pt;
+				width:5.25em;
+				text-align:right;
+			}
+
+			#chat_window span {
+				float:left;
+				width:calc(100% - 7pt - 5.25em);
 			}
 
 			#chat_controls {

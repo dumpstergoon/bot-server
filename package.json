@@ -26,7 +26,7 @@
   "dependencies": {
     "express": "^4.17.1",
     "express-ws": "^4.0.0",
-    "got": "^10.2.2",
+    "request": "^2.88.0",
     "zeromq": "^6.0.0-beta.6"
   }
 }
