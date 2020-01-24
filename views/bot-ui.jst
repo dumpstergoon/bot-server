@@ -46,7 +46,7 @@
 	const GENERATE_BTN = document.getElementById('generate_session');
 	const CLEAR_BTN = document.getElementById('clear_session');
 
-	const ws = new WebSocket(ENDPOINT);
+	let ws = new WebSocket(ENDPOINT);
 	
 	let chat = (el, console, log = []) => {
 		const create = (type, msg, exchange) => {
@@ -112,16 +112,24 @@
 		USER_INPUT.value = '';
 	};
 
-	ws.addEventListener('message', (e, msg = JSON.parse(e.data)) => {
-		console.log('Message Received', msg);
-		CONSOLE.innerHTML += JSON.stringify(msg, null, 2);
-		CONSOLE.innerHTML += "\\n\\n";
-		hljs.highlightBlock(CONSOLE);
-		if (msg.user_input)
-			chat.send(msg.user_input);
-		else
-			chat.receive(msg.response, msg);
+	const setup_listener = ws =>
+		ws.addEventListener('message', (e, msg = JSON.parse(e.data)) => {
+			console.log('Message Received', msg);
+			CONSOLE.innerHTML += JSON.stringify(msg, null, 2);
+			CONSOLE.innerHTML += "\\n\\n";
+			hljs.highlightBlock(CONSOLE);
+			if (msg.user_input)
+				chat.send(msg.user_input);
+			else
+				chat.receive(msg.response, msg);
+		});
+
+	ws.addEventListener('close', e => {
+		ws = new WebSocket(ENDPOINT);
+		setup_listener(ws);
 	});
+
+	setup_listener(ws);
 
 	GENERATE_BTN.addEventListener('click', e => {
 		location.href='/exchange/${ item.id }/${ uuid() }';
