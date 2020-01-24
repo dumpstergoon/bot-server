@@ -8,7 +8,7 @@
 const VIEWS = '../views'; // TODO: pull this from a config file
 // networking from one endpoint.
 const express = require('express'),
-		protocol = 'insecure',
+		protocol = 'secure',
 		port = process.env.PORT || 3000,
 		domain = process.env.DOMAIN || '67.207.69.19',
 		secure = string => protocol === 'secure' ? string : '';
