@@ -100,6 +100,14 @@
 				"description": "Any updated or new data from the bot.",
 				"type": "object",
 				"properties": {
+					"max_attempts": {
+						"description": "Maximum attempts the user has to verify passphrase.",
+						"type": "integer"
+					},
+					"attempts_remaining": {
+						"description": "This begins as the same value as <code>max_attempts</code> and the component fails when this reaches <code>0</code>",
+						"type": "integer"
+					},
 					"verified": {
 						"description": "<code>True</code> when the passphrase has been verified. You can use <code>component_done</code> and <code>component_failed</code> in lieu of this. Other components this may not be the case so it's good practice to have an explicit \"goal-accomplished\" boolean. We might have a few sub-goals or outcomes within one bot.",
 						"type": "boolean"

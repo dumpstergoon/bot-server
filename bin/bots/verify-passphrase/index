@@ -91,8 +91,10 @@ bot.init(
 			
 			console.log('>>>>', msg, state.indices);
 			
-			if (verify(msg, state.indices))
+			if (verify(msg, state.indices)) {
+				state.context.verified = true;
 				return "passphrase_verified";
+			}
 			return "passphrase_denied";
 		}),
 		passphrase_denied: actions.default("verify_passphrase"),
