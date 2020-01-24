@@ -9,7 +9,7 @@ const VIEWS = '../views'; // TODO: pull this from a config file
 // networking from one endpoint.
 const express = require('express'),
 		protocol = 'insecure',
-		port = process.env.PORT || 3131,
+		port = process.env.PORT || 3000,
 		domain = process.env.DOMAIN || 'localhost',
 		secure = string => protocol === 'secure' ? string : '';
 const express_websockets = require('express-ws')(express());
