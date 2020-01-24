@@ -43,20 +43,28 @@ const send = (bot_id, message, callback) => {
 			callback(parse(message))));
 };
 
+const bot_fetch_logs = (bot_id, session_id, callback) =>
+	send(bot_id, models.SessionLogsRequest(
+		session_id
+	), callback);
+
 const bot_customize_instance = (bot_id, instance_id, responses, callback) =>
-	send(bot_id, models.BotCustomiseInstanceRequest(
+	send(bot_id, models.CustomiseInstanceRequest(
 		instance_id,
 		responses
 	), callback);
 
 const bot_customize_session = (bot_id, session_id, responses, callback) =>
-	send(bot_id, models.BotCustomizeSessionRequest(
+	send(bot_id, models.CustomizeSessionRequest(
 		session_id,
 		responses
 	), callback);
 
+const bot_clear_session = (bot_id, session_id, callback) =>
+	send(bot_id, models.ClearSessionRequest(session_id), callback);
+
 const bot_exchange = (bot_id, instance_id, session_id, input, context = {}, callback) =>
-	send(bot_id, models.BotExchangeRequest(
+	send(bot_id, models.ExchangeRequest(
 		instance_id,
 		session_id,
 		input,
@@ -110,10 +118,6 @@ module.exports = {
 					instance_id = potential_id || 'default'
 				] = extract_ids(id);
 
-				console.log(id);
-				console.log(bot_id);
-				console.log(instance_id);
-
 				let bot = registry[bot_id];
 
 				res.render(bot ? "bot-details" : "bot-not-found", {
@@ -160,8 +164,6 @@ module.exports = {
 				] = extract_ids(id);
 
 				let bot = registry[bot_id];
-
-				// TODO: How should we incorporate "instance_id" into our views? xx
 
 				res.render(bot ? "bot-ui" : "bot-not-found", {
 					title: `${SKYCRATE_LTD} | ${BEN} | ${bot_id} @ ${session_id}`,
@@ -213,9 +215,14 @@ module.exports = {
 						console.error(error);
 						res.sendStatus(500);
 					});
+			})
+			.delete((req, res, next,
+				id = req.params.bot_id,
+				session_id = req.params.session_id) => {
+				// Yeah I really should abstract this a bit better...
+				bot_clear_session(extract_ids(id)[0], session_id, msg => res.json(msg));
 			});
 		
-		// TODO: move these routes to router such that app is not being passed around.
 		router.ws("/:bot_id/:session_id",
 			(ws, req, next,
 				id = req.params.bot_id,
@@ -231,25 +238,20 @@ module.exports = {
 				ws.on('message', msg => {
 					msg = JSON.parse(msg);
 
-					// Whenever we receive a message, figure out who our connected clients are:
+					// All server clients....
 					let clients = Array.from(socket_router.getWss().clients);
 
-					console.log('Message received. Total server clients:', clients.length);
-
+					// All clients at this endpoint...
 					clients = clients.filter(sock =>
 						sock.path === req.path);
 					
-					console.log('Total endpoint clients:', clients.length);
-					
-					// Great! Now, before we chat to our bot, broadcast our sent
-					// message to everyone but the client who sent it:
+					// All clients at this endpoint that DID NOT send the request...
 					let others = clients.filter(sock => sock !== ws);
-
+					
+					// Tell the "others" what happened...
 					others.forEach(client => {
 						client.send(JSON.stringify(msg))
 					});
-					
-					console.log('Total endpoint broadcast clients:', others.length);
 					
 					// Then we wanna talk with our bot...
 					bot_exchange(
@@ -260,17 +262,24 @@ module.exports = {
 						msg.context,
 						msg => {
 							// Send message back to ALL clients
-							console.log('Messaged from bot reveived.', msg);
-							console.log('Sending to', clients.length, 'clients.');
-							clients.forEach(client => {
-								console.log(client.path);
-								client.send(JSON.stringify(msg))
-							});
+							clients.forEach(client =>
+								console.log("???", msg) ||
+								client.send(JSON.stringify(msg)));
 						}, error => {
 							console.error(error);
 						});
 				});
 			});
+		
+		router.route("/:bot_id/:session_id/log")
+			.get((req, res, next,
+					id = req.params.bot_id,
+					session_id = req.params.session_id) => {
+				
+					let [bot_id] = extract_ids(id);
+					bot_fetch_logs(bot_id,
+						session_id, msg => res.json(msg));
+				});
 
 		// This is for Facebook... possibly Whatsapp as well.
 		// Time to get these pages sorted and tested so I can use components

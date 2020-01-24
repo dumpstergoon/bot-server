@@ -7,35 +7,49 @@
 		<code>${ http_protocol + endpoint }/<br />${ item.id }/<br />${ item.session_id }</code>
 	</a>
 </h4>
-<button onclick="location.href='/exchange/${ item.id }/${ uuid() }'">Generate New Session</button>
+<button id="generate_session">Generate New Session</button>
+<button id="clear_session">Clear Session</button>
 <hr />
 <a href="/exchange">Bot Exchange Network</a>&nbsp;|&nbsp;<a href="/exchange/${ item.id }">${ item.bot.id } | ${ item.instance_id }</a>&nbsp;|&nbsp;<b>session:</b> ${ item.session_id }
 <hr />
 
+<h3>Web Socket Client</h3>
 <h6><code>${ socket_protocol + endpoint }/<br />${ item.bot.id }/${ item.session_id }</code></h6>
-
+<p>
+	The simplest way to connect to a chatbot component is to use websockets.
+	Multiple clients can be connected to the same endpoint.
+</p>
 <ol id="chat_window"></ol>
 <div id="chat_controls">
-	<input id="user_input" type="text" />
+	<input id="user_input" type="text" placeholder="Type something..." />
 	<button id="send_btn">send</button>
 </div>
+
+<h4>Message Log</h4>
+<pre>
+<code id="console" class="javascript">
+</code>
+</pre>
 
 <hr />
 <a href="/exchange/${ item.id }">&lt; Back</a>
 
 <script type="text/javascript">
 	const ENDPOINT = '${ socket_protocol }' + location.host + '/exchange/${ item.id }/${ item.session_id }';
-	const SEND_BTN = document.getElementById('send_btn');
-	const USER_INPUT = document.getElementById('user_input');
-	const CHAT_WINDOW = document.getElementById('chat_window');
 	const ENTER_KEY = "Enter";
 
-	const ws = new WebSocket(ENDPOINT);
-	const chat = (el => {
-		let attempt = localStorage.getItem(ENDPOINT);
+	const CHAT_WINDOW = document.getElementById('chat_window');
+	const USER_INPUT = document.getElementById('user_input');
+	const SEND_BTN = document.getElementById('send_btn');
+	const CONSOLE = document.getElementById('console');
 
-		const log = attempt ? JSON.parse(attempt) : [];
-		const create = (type, msg, time) => {
+	const GENERATE_BTN = document.getElementById('generate_session');
+	const CLEAR_BTN = document.getElementById('clear_session');
+
+	const ws = new WebSocket(ENDPOINT);
+	
+	let chat = (el, console, log = []) => {
+		const create = (type, msg, exchange) => {
 			let bubble = document.createElement('li');
 			bubble.className = type;
 
@@ -44,42 +58,55 @@
 
 			let text = document.createElement('span');
 			text.innerText = msg;
-			if (type === 'bot')
-				text.innerText += ' (' + time + 's)';
-			
+
 			bubble.appendChild(label);
 			bubble.appendChild(text);
+
+			if (exchange && exchange.response_time) {
+				let time = document.createElement('span');
+				time.className = 'time';
+				time.innerText += ' (' + exchange.response_time + 's) ';
+
+				bubble.appendChild(time);
+			}
 
 			el.appendChild(bubble); 
 			el.scrollTop = el.scrollHeight;
 		};
 
-		log.forEach(x => create(x.type, x.msg, x.time));
+		log.forEach(x => create(x.type, x.msg, x.exchange));
 		
 		return {
-			push(type, msg, time = 0) {
+			push(type, msg, exchange = {}) {
 				log.push({
 					type: type,
 					msg: msg,
-					time: time
+					exchange: exchange
 				});
-				localStorage.setItem(ENDPOINT, JSON.stringify(log));
-				create(type, msg, time);
+				//localStorage.setItem(ENDPOINT, JSON.stringify(log));
+				create(type, msg, exchange);
 			},
 			send(msg) {
 				this.push('user', msg)
 			},
 			receive(msg, time) {
 				this.push('bot', msg, time);
+			},
+			clear() {
+				//localStorage.setItem(ENDPOINT, JSON.stringify([]));
+				el.innerHTML = console.innerHTML = '';
 			}
 		};
-	})(CHAT_WINDOW);
+	};
 
 	const send_event = e => {
 		chat.send(USER_INPUT.value);
 		
 		ws.send(JSON.stringify({
 			user_input: USER_INPUT.value,
+			context: {
+				timestamp: Date.now()
+			}
 		}));
 		
 		USER_INPUT.value = '';
@@ -87,11 +114,28 @@
 
 	ws.addEventListener('message', (e, msg = JSON.parse(e.data)) => {
 		console.log('Message Received', msg);
+		CONSOLE.innerHTML += JSON.stringify(msg, null, 2);
+		CONSOLE.innerHTML += "\\n\\n";
+		hljs.highlightBlock(CONSOLE);
 		if (msg.user_input)
 			chat.send(msg.user_input);
 		else
-			chat.receive(msg.response, msg.response_time);
+			chat.receive(msg.response, msg);
 	});
+
+	GENERATE_BTN.addEventListener('click', e => {
+		location.href='/exchange/${ item.id }/${ uuid() }';
+	}, false);
+
+	CLEAR_BTN.addEventListener('click', e => {
+		let req = new XMLHttpRequest();
+		req.addEventListener('load', e => {
+			chat.clear();
+
+		});
+		req.open("DELETE", "/exchange/${ item.id }/${ item.session_id }");
+		req.send();
+	}, false);
 
 	USER_INPUT.addEventListener('keyup', e => {
 		if (e.key === ENTER_KEY) {
@@ -101,4 +145,11 @@
 	}, false);
 
 	SEND_BTN.addEventListener('click', send_event, false);
+
+	let req = new XMLHttpRequest();
+	req.addEventListener('load', function(e) {
+		chat = chat(CHAT_WINDOW, CONSOLE, JSON.parse(this.response).log);
+	});
+	req.open("GET", "/exchange/${ item.id }/${ item.session_id }/log");
+	req.send();
 </script>

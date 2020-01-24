@@ -126,7 +126,8 @@
 			pre > code .hljs-comment {
 				color: #999999;
 			}
-
+			
+			.action,
 			pre > code .hljs-attr,
 			pre > code .hljs-const {
 				color: #f2777a;
@@ -147,10 +148,10 @@
 				color: #99cc99;
 			}
 
-			
+			.time,
 			pre > code .hljs-function,
 			pre > code .hljs-title {
-				color:#6699cc;
+				color:#6699cc !important;
 			}
 
 			pre > code .hljs-keyword {
@@ -230,6 +231,7 @@
 			}
 
 			#chat_window li {
+				position: relative;
 				display:block;
 				margin:0;
 				padding:7pt 0;
@@ -258,7 +260,7 @@
 
 			#chat_window span {
 				float:left;
-				width:calc(100% - 7pt - 5.25em);
+				width:calc(100% - 77pt - 5.25em);
 			}
 
 			#chat_controls {
@@ -273,6 +275,17 @@
 			#chat_controls input {
 				flex-grow:2;
 				margin-right:10pt;
+			}
+
+			#chat_window .time {
+				position: absolute;
+				float:none;
+				right:10pt;
+				top:0.6125em;
+				width:auto;
+			}
+
+			#console {
 			}
 		</style>
 

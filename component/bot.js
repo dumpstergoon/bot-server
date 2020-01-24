@@ -8,14 +8,11 @@ const {
 } = require('../io');
 const {
 	parse,
-	stringify,
-	generate_uuid
+	stringify
 } = require("../utils");
 
-const sessions = directory('./data/sessions', session_id =>
-	models.Session(session_id));
-const instances = directory('./data/instances', instance_id =>
-	models.Instance(instance_id));
+const sessions = directory('./data/sessions');
+const instances = directory('./data/instances');
 
 const render_error = config => {
 	return [
@@ -46,44 +43,108 @@ const update = (info, success, error) => {
 	})
 };
 
+// Yeah... this could work...
+const exchange = async (actions, msg, state, responses, output = []) => {
+	let current_action = state.action;
+	console.log('CURRENT ACTION:', current_action);
+
+	let response = await actions[current_action](
+		msg, state,
+		models.Responses(responses[current_action] || [])
+	);
+	state.action = response.next_action;
+
+	console.log('NEXT ACTION:', response.next_action);
+	
+	if (response.type === 'send')
+		return Object.assign(response, {
+			response: (output.length ? output.join(' ') + ' ' : '') + response.response
+		});
+	
+	if (response.type === 'pass')
+		output.push(response.response);
+	
+	return await exchange(
+		actions,
+		response.user_input,
+		state,
+		responses,
+		[...output]);
+};
+
 const listen = async (channel, actions = {}, responses = {}, schema = {}) => {
 	let message = parse(await channel.receive());
 	let _timestamp = Date.now();
-	let instance = instances[message.instance_id || 'default'];
+
+	instances[message.instance_id] = instances[message.instance_id] ||
+		models.Instance(message.instance_id);
+	
+	let instance = instances[message.instance_id];
 	
 	if (message.session_id) {
+		// TODO: Need a proper function for this...
+		sessions[message.session_id] = sessions[message.session_id] ||
+			models.Session(message.session_id, message.context);
 		let session = sessions[message.session_id];
-		console.log('===============');
+
+		console.log('=============================================');
 		console.log(session);
-		console.log('===============');
+		console.log('=============================================');
 
 		if (message.user_input) {
-			let next_action = session.state.action;
+			let action_name = session.state.action;
 
-			if (!actions[next_action])
-				await channel.send(stringify(models.BotActionNotFoundError(next_action)));
+			if (!actions[action_name])
+				await channel.send(stringify(models.ActionNotFoundError(action_name)));
 			else {
-				//actions[next_action]();
+				if (message.context)
+					session.context = Object.assign(session.context, message.context);
+				
+				// Anything we get from the client, we add to our state's model...
+				session.state.update_model(session.context);
 
-				await channel.send(stringify(models.BotExchangeResponse(
-					next_action,
-					`THIS IS A GENERIC MESSAGE. You wrote "${message.user_input}".`,
-					{
-						test: "Hello, World."
-					},
-					(Date.now() - _timestamp) / 1000
-				)));
+				// clear context
+				session.state.context = {};
+
+				let action = await exchange(
+					actions, message.user_input, session.state,
+					session.responses || instance.responses ||
+						responses || [`<${session.state.action}:NO_RESPONSES_FOUND>`]);
+				
+				let response = models.ExchangeResponse(
+					action_name,
+					action.response || '<NO_RESPONSE_PROVIDED>',
+					session.state.context,
+					(Date.now() - _timestamp) / 1000,
+					action.confidence,
+					action.done,
+					false,
+					action.failed
+				);
+				// Send back our ExchangeResponse...
+				await channel.send(stringify(response));
+
+				session.log = session.log.concat(
+					models.UserMessageLog(message),
+					models.BotMessageLog(response)
+				);
+				// Once our exchange flow has finished, save the session:
+				session.save();
 			}
 		} else if (message.responses) {
 			session.responses = message.responses;
-			await channel.send(stringify(models.BotCustomizeSessionResponse(message.session_id)));
+			await channel.send(stringify(models.CustomizeSessionResponse(message.session_id)));
+		} else if (message.clear) {
+			delete sessions[message.session_id];
+			await channel.send(stringify(models.ClearSessionResponse(session.session_id)));
+		} else if (message.log) {
+			await channel.send(stringify(models.SessionLogsResponse(session.session_id, session.log)));
 		}
-		
 	} else if (message.responses && instance !== 'default') {
 		instance.responses = message.responses;
-		await channel.send(stringify(models.BotCustomizeInstanceResponse(message.instance)));
+		await channel.send(stringify(models.CustomizeInstanceResponse(message.instance)));
 	} else
-		await channel.send(stringify(models.BotBadRequestResponse(message)));
+		await channel.send(stringify(models.BadClientRequest(message)));
 
 	// Repeat...
 	listen(channel, actions, responses, schema);
@@ -102,9 +163,7 @@ const init = async (config, responses, schema, actions) => {
 		}
 	), () => {
 		console.log(`"${config.name}" has been registered at ${config.host}/${config.id}`);
-
-		// TODO: Now we gotta do shit with these actions. Save some state, yada yada yada. Get'er done.
-
+		// Now that we're registered, time to start listening!
 		listen(channel, actions, responses, schema);
 	}, err => {
 		console.error(render_error(config).join('\n'));

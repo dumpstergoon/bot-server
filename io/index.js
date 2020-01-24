@@ -17,7 +17,8 @@ const MAKE_NOTHING = (id => {});
 const FUNCTIONS = [
 	'update',
 	'save',
-	'clear'
+	'clear',
+	'delete'
 ];
 
 const create_directory = path =>
@@ -40,7 +41,7 @@ const store = (path, _default = {}, _pivot = path.lastIndexOf('/')) => {
 			update(table) {
 				for (const key in table)
 					this[key] = table[key];
-				this.save();
+				return this.save();
 			},
 			save() {
 				writeFile(path, stringify(this) + '\n', DO_NOTHING);
@@ -81,13 +82,10 @@ module.exports = {
 		create_directory(path);
 		return new Proxy(
 			{}, {
-				get(collection, id) {
-					if (Reflect.has(collection, id))
-						return Reflect.get(collection, id);
-					return collection[id] = store(`${path}/${id}.json`, constructor(id))
-				},
-				set(collection, id, data, proxy) {
-					return proxy[id].update(data);
+				set(collection, id, data) {
+					if (!Reflect.has(collection, id))
+						return collection[id] = store(`${path}/${id}.json`, data);
+					return collection[id].update(data);
 				},
 				deleteProperty(collection, id) {
 					return Reflect.has(collection, id) &&

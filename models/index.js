@@ -1,7 +1,10 @@
+const {
+	create
+} = require("../utils");
 const ONE_HOUR = 1000 * 60 * 60;
 
 const models = {
-	BotExchangeRequest: (instance_id, session_id, input = "", context = {}) => {
+	ExchangeRequest: (instance_id, session_id, input = "", context = {}) => {
 		return {
 			instance_id: instance_id,
 			session_id: session_id,
@@ -9,14 +12,15 @@ const models = {
 			context: context
 		}
 	},
-	BotExchangeResponse: (
+	ExchangeResponse: (
 		action = "",
 		response = "",
 		context = {},
 		response_time = 1.0,
 		confidence = 1.0,
 		done = false,
-		out_of_context = false) => {
+		out_of_context = false,
+		failed = false) => {
 		return {
 			action: action,
 			response: response,
@@ -24,46 +28,78 @@ const models = {
 			confidence: confidence,
 			idontknow: confidence === 0,
 			out_of_context: out_of_context,
-			component_failed: confidence === 0 && done,
+			component_failed: failed,
 			component_done: done,
 			updated_context: context,
 		};
 	},
-	BotExchangeComplete: (action, response, context, response_time, confidence) =>
-		models.BotExchangeResponse(
+
+	ExchangeComplete: (action, response, context, response_time, confidence) =>
+		models.ExchangeResponse(
 			action, response, context,
 			response_time, confidence, true
 		),
-	BotExchangeFailure: (action, response, context, response_time) =>
-		models.BotExchangeComplete(
+	ExchangeFailure: (action, response, context, response_time, reason) =>
+		Object.assign(models.ExchangeComplete(
 			action, response, context,
 			response_time, 0.0
-		),
-	BotCustomizeSessionRequest: (session_id, responses) => {
+		), {
+			reason: reason || 'UNKNOWN'
+		}),
+	
+	SessionLogsRequest: session_id => {
+		return {
+			session_id: session_id,
+			log: true
+		}
+	},
+	SessionLogsResponse: (session_id, log = []) => {
+		return {
+			session_id: session_id,
+			log: log
+		}
+	},
+	ClearSessionRequest: session_id => {
+		return {
+			session_id: session_id,
+			clear: true
+		}
+	},
+	ClearSessionResponse: (session_id, success = true) => {
+		return {
+			session_id: session_id,
+			success: success
+		}
+	},
+	CustomizeSessionRequest: (session_id, responses) => {
 		return {
 			session_id: session_id,
 			responses: responses
 		}
 	},
-	BotCustomizeSessionResponse: (session_id, success = true) => {
+	CustomizeSessionResponse: (session_id, success = true) => {
 		return {
 			session_id: session_id,
 			success: success
-		};
+		}
 	},
-	BotCustomiseInstanceRequest: (instance_id, responses) => {
+	
+	CustomiseInstanceRequest: (instance_id, responses) => {
 		return {
 			instance_id: instance_id,
 			responses: responses
 		}
 	},
-	BotCustomizeInstanceResponse: (instance_id, success = true) => {
+	CustomizeInstanceResponse: (instance_id, success = true) => {
 		return {
 			instance_id: instance_id,
+			response: `Bot instance "${instance_id} successfully modified."`,
 			success: success
-		};
+		}
 	},
-	BotBadRequestResponse: message => {
+
+
+	BadClientRequest: message => {
 		return {
 			response: "Request could not be interpreted.",
 			component_failed: true,
@@ -72,51 +108,148 @@ const models = {
 	},
 	BotNotFoundReply: bot_id => {
 		return {
-			response: `BOT "${bot_id}" DOES NOT EXIST ON THIS SERVER.`,
+			response: `<BOT_"${bot_id}"_NOT_FOUND>`,
 			component_failed: true,
 		};
 	},
-	BotActionNotFoundError: action => {
+	ActionNotFoundError: action => {
 		return {
-			response: `Unhandled action "${action}".`,
+			response: `<ACTION_"${action}"_NOT_FOUND>`,
 			component_failed: true
 		}
 	},
 
-	Session: (session_id = '', duration = ONE_HOUR, time = Date.now()) => {
+	State: () => {
 		return {
+			action: "index",
+			context: {},
+			model: {},
+			update_context(context) {
+				// return the updated context so we can send to client if
+				// need be.
+				return this.context =
+					Object.assign(this.context, context);
+			},
+			update_model(model) {
+				// After we update, we return the model so we can easily pass it along...
+				return this.model = Object.assign(this.model, model);
+			}
+		};
+	},
+
+	Session: (session_id = '', context = {}, duration = ONE_HOUR, time = Date.now()) => {
+		return create({
 			session_id: session_id,
 			created: time,
 			expires: time + duration,
-			state: {
-				action: "index",
-			},
-			responses: [],
+			state: models.State(),
+			responses: null,
+			context: context,
 			log: [] // Back and forth log
-		}
+		}, {
+			log_message() {
+				// TODO: add ability to save logs...
+				// this is good for refreshing sessions in say, a browser,
+				// and having all the messages come down the pipe.
+				// TODO: create end-point for logs.
+			}
+		})
 	},
 
 	Instance: (instance_id = 'default') => {
 		return {
 			instance_id: instance_id,
-			responses: []
+			responses: null
 		}
 	},
 
-	Log: (message = '', context = {}, state = {}, from = 'user') => {
+	Response: template_string => {
+		return Object.assign(template_string, {
+			name_trim(match) {
+				return match.substr(1, match.length - 2);
+			},
+			render(model) {
+				return template_string.replace(/\[[\w]+\]/gi,
+					match => model[this.name_trim(match)] || `<${ match }_NOT_FOUND>`);
+			}
+		});
+	},
+
+	Responses: list => {
+		return Object.assign(list, {
+			random() {
+				return models.Response(
+					list[Math.round(Math.random() * (list.length - 1))]);
+			}
+		});
+	},
+
+	ResponseModel: (model = {}) => {
+		let datetime = new Date(model.timestamp || Date.now()).getHours();
+		return Object.assign(model, {
+			name: model.user ? model.user.fristName : '<NAME_NOT_FOUND>',
+			fullname: model.user ? `${model.user.title} ${model.user.firstName} ${model.user.lastName}` : '<FULLNAME_NOT_FOUND>',
+			email: model.userInfo ? model.userInfo.email : '<EMAIL_NOT_FOUND>',
+			time_of_day: datetime >= 17 ? 'evening' :
+				(datetime >= 12 ? 'afternoon' :
+					(datetime >= 5 ? 'morning' : 'evening')),
+		});
+	},
+
+	Message: (next_action, type, done = false, failed = false) => {
 		return {
-			message: message,
-			context: context,
-			state: state,
-			from: from
+			next_action: next_action || 'index',
+			type: type || 'send',
+			done: done,
+			confidence: 1.0,
+			failed: failed
 		}
 	},
-	UserLog: (message, context, state) => {
-		return models.Log(message, context, state);
+
+	ResponseMessage: (next_action, response, type, done = false, failed = false) => Object.assign(
+		models.Message(next_action, type, done, failed),
+		{
+			response: response
+		}
+	),
+
+	SendMessage: (next_action, response, done = false, failed = false) =>
+		models.ResponseMessage(next_action, response, 'send', done, failed),
+
+	PassMessage: (next_action, msg, response) => Object.assign(
+		models.ResponseMessage(next_action, response, 'pass'),
+		{
+			user_input: msg
+		}
+	),
+
+	RouteMessage: (next_action, msg) => Object.assign(
+		models.Message(next_action, 'route'),
+		{
+			user_input: msg
+		}
+	),
+
+	ExitMessage: response =>
+		models.SendMessage("exit", response, true),
+	
+	FailedMessage: response =>
+		models.SendMessage("failed", response, true, true),
+	
+	MessageLog: (type, exchange) => {
+		return {
+			type: type,
+			msg: type === 'user' ? exchange.user_input : exchange.response,
+			exchange: exchange
+		};
 	},
-	BotLog: (message, context, state) => {
-		return models.Log(message, context, state, 'bot');
+
+	UserMessageLog: exchange => {
+		return models.MessageLog('user', exchange)
 	},
+	BotMessageLog: exchange => {
+		return models.MessageLog('bot', exchange)
+	}
 };
 
 module.exports = models;
