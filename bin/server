@@ -9,9 +9,9 @@ const VIEWS = '../views'; // TODO: pull this from a config file
 // networking from one endpoint.
 const express = require('express'),
 		protocol = 'secure',
+		secure = (string => protocol === 'secure' ? string : ''),
 		port = process.env.PORT || 3000,
-		domain = process.env.DOMAIN || 'skycrate.net',
-		secure = string => protocol === 'secure' ? string : '';
+		domain = process.env.DOMAIN || 'skycrate.net';
 const express_websockets = require('express-ws')(express());
 const app = express_websockets.app;
 const zengine = require('../../zengine');
@@ -23,7 +23,7 @@ const render = zengine.init({
 	port: port,
 	http_protocol: `http${ secure('s') }://`,
 	socket_protocol: `ws${ secure('s') }://`,
-	endpoint: `${ domain }:${ port }/exchange`,
+	endpoint: `${ domain }${ secure ? '' : ':' + port }/exchange`,
 	uuid: require('../utils').generate_uuid
 });
 
