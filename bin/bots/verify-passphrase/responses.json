@@ -4,7 +4,7 @@
 		"Enter as a single word the [index_one], [index_two], and [index_three] letters of your stored passphrase."
 	],
 	"passphrase_denied": [
-		"Passphrase wasn't a match... try again.",
+		"Passphrase wasn't a match... please try again.",
 		"Didn't quite get that.",
 		"Just the [index_one], [index_two], and [index_three] letters only please."
 	],
@@ -12,10 +12,15 @@
 		"Thank you! Your passphrase has been verified.",
 		"Brilliant. That's a match!"
 	],
-	"forced_exit": [
-		"Sorry. We cannot verify your passphrase this [time_of_day]."
+	"too_many_attempts": [
+		"Sorry. We cannot verify your passphrase this [time_of_day].",
+		"Too many attempts. Try again later."
 	],
+	
 	"exit": [
-		"Ok. Let's forget about the passphrase."
+		"PASSPHRASE HAS BEEN VERIFIED. GENERATE OR CLEAR SESSION."
+	],
+	"failed": [
+		"PASSPHRASE WAS NOT VERIFIED. GENERATE OR CLEAR SESSION"
 	]
 }

@@ -45,9 +45,9 @@
 						"description": "<b>Optional.</b> Number of failed password attempts before the bot finishes and reports it has failed.<br /><br />Defaults to 3.",
 						"type": "integer"
 					},
-					"datetime": {
-						"description": "<b>Optional.</b> Provide context for the time of day. Can be used in responses: <code>\"Good [time_of_day]!\"</code>.<br /><br />Where <code>[time_of_day]</code> has the values <em>\"morning\"</em>, <em>\"afternoon\"</em>, and <em>\"evening\"</em> depending on the time provided.<br /><br />Defaults to current UTC time.",
-						"type": "date"
+					"timestamp": {
+						"description": "<b>Optional.</b> Provide context for the time of day (use milliseconds from epoch like with <code>Date.now()</code>). Can be used in responses: <code>\"Good [time_of_day]!\"</code>.<br /><br />Where <code>[time_of_day]</code> has the values <em>\"morning\"</em>, <em>\"afternoon\"</em>, and <em>\"evening\"</em> depending on the time provided.<br /><br />Defaults to current UTC time.",
+						"type": "integer"
 					}
 				},
 				"required": "passphrase"

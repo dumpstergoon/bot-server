@@ -3,8 +3,45 @@
 'use strict';
 
 const {
-	bot
+	bot,
+	actions
 } = require('../../../component');
+
+const INDICES = ['th', 'st', 'nd', 'rd', 'th'];
+
+const render_index = index => {
+	index += 1;
+	let output = new String(index);
+	let offset = output.length - 2;
+	if (offset >= 0) {
+		let last_digits = parseInt(output.substr(offset));
+		if (last_digits < 14 && last_digits > 10)
+			return output += INDICES[4];
+	}
+	return output + INDICES[Math.min(4, parseInt(output.substr(offset + 1)))];
+};
+
+const rand = (a = 0, b = 1) => {
+	return Math.round(Math.random() * (b - a)) + a;
+};
+
+const rand_item = list => {
+	let index = rand(0, list.length - 1);
+	return [index, list[index]];
+};
+
+const chunkify = (string = "", chunk_size = 2, output = []) => {
+	if (!string.length)
+		return output;
+	let remainder = chunk_size * 2 - string.length;
+	if (remainder > 0)
+		chunk_size += remainder;
+	output.push(string.slice(0, chunk_size));
+	return chunkify(string.slice(chunk_size), chunk_size, output);
+};
+
+const verify = (passed, indices) =>
+	indices.map(([index, letter]) => letter).join('').toLowerCase() === passed.toLowerCase();
 
 // TODO: Need to make this a little more synchronous...
 bot.init(
@@ -12,6 +49,57 @@ bot.init(
 	require("./responses.json"),
 	require("./schema.json"),
 	{
-		// This is where we work our magique...
+		index: actions.router((msg, state) => {
+			let passphrase = state.model.passphrase || 'hannah';
+			let max_attempts = state.context.attempts_remaining = state.context.max_attempts = state.model.max_attempts || 3;
+			
+			console.log('PASSPHRASE: ', passphrase);
+
+			let chunk_size = passphrase.length / 3;
+			let groups = chunkify(
+				passphrase,
+				chunk_size
+			);
+			
+			//state.context.passphrase_verified = false;
+			state.indices = groups.map((letters, index, groups) => {
+				let [pos, letter] = rand_item(letters);
+				return [
+					index * Math.floor(chunk_size) + pos,
+					letter
+				];
+			});
+			state.update_model({
+				passphrase: passphrase,
+				max_attempts: max_attempts,
+				tries_left: max_attempts,
+
+				index_one: render_index(state.indices[0][0]),
+				index_two: render_index(state.indices[1][0]),
+				index_three: render_index(state.indices[2][0]),
+			});
+
+			return "ask_passphrase";
+		}),
+
+		ask_passphrase: actions.default("verify_passphrase"),
+		verify_passphrase: actions.router((msg, state) => {
+			let tries_left = state.context.attempts_remaining =
+				state.model.tries_left -= 1;
+			if (tries_left <= 0)
+				return "too_many_attempts";
+			
+			console.log('>>>>', msg, state.indices);
+			
+			if (verify(msg, state.indices))
+				return "passphrase_verified";
+			return "passphrase_denied";
+		}),
+		passphrase_denied: actions.default("verify_passphrase"),
+		too_many_attempts: actions.fail(),
+		passphrase_verified: actions.exit(),
+		
+		failed: actions.fail("FAILED:"),
+		exit: actions.exit("EXIT:"),
 	}
 );

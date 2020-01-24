@@ -41,3 +41,11 @@ const index = async () => {
 };
 
 index();
+
+/*pass_me: actions.pass("ask"),
+		ask: actions.default("confirm"),
+
+		confirm: actions.confirm("confirmed", "denied", "ask"),
+
+		confirmed: actions.default("index"),
+		denied: actions.default("exit"), */

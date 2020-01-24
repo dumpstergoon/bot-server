@@ -1,0 +1,161 @@
+{
+  "session_id": "2f58vw7pqq7f",
+  "created": 1579875246718,
+  "expires": 1579878846718,
+  "state": {
+    "action": "failed",
+    "context": {
+      "attempts_remaining": 0
+    },
+    "model": {
+      "timestamp": 1579875335301,
+      "passphrase": "hannah",
+      "max_attempts": 3,
+      "tries_left": 0,
+      "index_one": "2nd",
+      "index_two": "3rd",
+      "index_three": "5th",
+      "name": "<NAME_NOT_FOUND>",
+      "fullname": "<FULLNAME_NOT_FOUND>",
+      "email": "<EMAIL_NOT_FOUND>",
+      "time_of_day": "afternoon"
+    },
+    "indices": [
+      [
+        1,
+        "a"
+      ],
+      [
+        2,
+        "n"
+      ],
+      [
+        4,
+        "a"
+      ]
+    ]
+  },
+  "responses": null,
+  "context": {
+    "timestamp": 1579875335301
+  },
+  "log": [
+    {
+      "type": "user",
+      "msg": "hello, world.",
+      "exchange": {
+        "instance_id": "default",
+        "session_id": "2f58vw7pqq7f",
+        "user_input": "hello, world.",
+        "context": {
+          "timestamp": 1579875252442
+        }
+      }
+    },
+    {
+      "type": "bot",
+      "msg": "Type the 2nd, 3rd, and 5th letters of your chosen passphrase. Enter this on its own as one word.",
+      "exchange": {
+        "action": "index",
+        "response": "Type the 2nd, 3rd, and 5th letters of your chosen passphrase. Enter this on its own as one word.",
+        "response_time": 0.017,
+        "confidence": 1,
+        "idontknow": false,
+        "out_of_context": false,
+        "component_failed": false,
+        "component_done": false,
+        "updated_context": {
+          "max_attempts": 3,
+          "attempts_remaining": 3
+        }
+      }
+    },
+    {
+      "type": "user",
+      "msg": "siiiick",
+      "exchange": {
+        "instance_id": "default",
+        "session_id": "2f58vw7pqq7f",
+        "user_input": "siiiick",
+        "context": {
+          "timestamp": 1579875328532
+        }
+      }
+    },
+    {
+      "type": "bot",
+      "msg": "Didn't quite get that.",
+      "exchange": {
+        "action": "verify_passphrase",
+        "response": "Didn't quite get that.",
+        "response_time": 0.004,
+        "confidence": 1,
+        "idontknow": false,
+        "out_of_context": false,
+        "component_failed": false,
+        "component_done": false,
+        "updated_context": {
+          "attempts_remaining": 2
+        }
+      }
+    },
+    {
+      "type": "user",
+      "msg": "oh sorry",
+      "exchange": {
+        "instance_id": "default",
+        "session_id": "2f58vw7pqq7f",
+        "user_input": "oh sorry",
+        "context": {
+          "timestamp": 1579875331227
+        }
+      }
+    },
+    {
+      "type": "bot",
+      "msg": "Just the 2nd, 3rd, and 5th letters only please.",
+      "exchange": {
+        "action": "verify_passphrase",
+        "response": "Just the 2nd, 3rd, and 5th letters only please.",
+        "response_time": 0.011,
+        "confidence": 1,
+        "idontknow": false,
+        "out_of_context": false,
+        "component_failed": false,
+        "component_done": false,
+        "updated_context": {
+          "attempts_remaining": 1
+        }
+      }
+    },
+    {
+      "type": "user",
+      "msg": "ana",
+      "exchange": {
+        "instance_id": "default",
+        "session_id": "2f58vw7pqq7f",
+        "user_input": "ana",
+        "context": {
+          "timestamp": 1579875335301
+        }
+      }
+    },
+    {
+      "type": "bot",
+      "msg": " Too many attempts. Try again later.",
+      "exchange": {
+        "action": "verify_passphrase",
+        "response": " Too many attempts. Try again later.",
+        "response_time": 0.006,
+        "confidence": 1,
+        "idontknow": false,
+        "out_of_context": false,
+        "component_failed": true,
+        "component_done": true,
+        "updated_context": {
+          "attempts_remaining": 0
+        }
+      }
+    }
+  ]
+}
