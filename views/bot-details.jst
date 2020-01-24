@@ -17,6 +17,7 @@
 </menu>
 
 <br />
+<button onclick="location.href='/exchange/${ item.id }/${ uuid() }'">Generate New Session</button>
 
 <h3>Supported Languages</h3>
 <ul>
@@ -106,9 +107,11 @@ ${ render("bot-details/response-schema", item.bot.schema.response) }
 
 <h3><a href="#custom-responses" name="custom-responses">Custom Responses</a></h3>
 <p>
-	Using a <code>PUT</code> request at
+	Using a <code>PUT</code> request at either
+	<code>${ http_protocol + endpoint }/${ item.id }_&lt;instance_id&gt;</code> or
 	<code>${ http_protocol + endpoint }/${ item.id }/&lt;session_id&gt;</code>,
-	you can save your custom responses and the component will use these responses instead.
+	you can save your custom responses to the instance or the session and the
+	component will use these responses instead.
 </p>
 <pre>
 <code class="javascript">
