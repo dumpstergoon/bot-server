@@ -1,5 +1,5 @@
 {
-	"host": "http://localhost/exchange",
+	"host": "https://skycrate.net/exchange",
 	"uri": "ipc://@skycrate-verify-passphrase",
 	"id": "skycrate-verify-passphrase",
 	"name": "Verify Passphrase",
