@@ -1,3 +1,8 @@
-#!/usr/bin/env node
-// @ts-nocheck
-'use strict';
+#!/bin/bash
+
+# Pull in our environment variables
+source ../.env
+
+for bot in $(ls ./bots); do
+	echo 
+done

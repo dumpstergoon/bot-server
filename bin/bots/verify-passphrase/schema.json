@@ -104,7 +104,7 @@
 						"description": "Maximum attempts the user has to verify passphrase.",
 						"type": "integer"
 					},
-					"attempts_remaining": {
+					"attempts_<br />remaining": {
 						"description": "This begins as the same value as <code>max_attempts</code> and the component fails when this reaches <code>0</code>",
 						"type": "integer"
 					},
