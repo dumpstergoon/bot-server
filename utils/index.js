@@ -28,6 +28,8 @@ module.exports = {
 	to_object: to_object,
 	to_definition: to_definition,
 	create: create,
+	constructor: (defaults = {}, prototype = {}) =>
+		options => create(Object.assign({}, defaults, options), prototype),
 	parse: req => JSON.parse(req[0]),
 	stringify: msg => JSON.stringify(msg, null, 2),
 	validate: (obj, schema) => true,

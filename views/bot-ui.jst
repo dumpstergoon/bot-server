@@ -156,6 +156,7 @@
 
 	let req = new XMLHttpRequest();
 	req.addEventListener('load', function(e) {
+		console.log('here??');
 		chat = chat(CHAT_WINDOW, CONSOLE, JSON.parse(this.response).log);
 	});
 	req.open("GET", "/exchange/${ item.id }/${ item.session_id }/log");

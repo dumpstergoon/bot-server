@@ -7,6 +7,7 @@ const {
 	directory
 } = require('../io');
 const {
+	constructor,
 	parse,
 	stringify
 } = require("../utils");
@@ -100,6 +101,8 @@ const listen = async (channel, actions = {}, responses = {}, schema = {}) => {
 				if (message.context)
 					session.context = Object.assign(session.context, message.context);
 				
+				// We gotta ensure our API is functional...
+				session.state = models.State(session.state);
 				// Anything we get from the client, we add to our state's model...
 				session.state.update_model(session.context);
 

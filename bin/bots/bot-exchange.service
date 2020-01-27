@@ -1,0 +1,10 @@
+[Unit]
+Description=Bot Exchange Network
+
+[Service]
+WorkingDirectory=/root/bot-server/bin
+ExecStart=/usr/bin/env node start
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

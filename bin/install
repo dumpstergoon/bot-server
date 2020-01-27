@@ -1,0 +1,25 @@
+#!/bin/bash
+
+BIN=$(pwd)
+ROOT="$BIN/../"
+
+npm install $ROOT
+
+# This function create a service file
+function create-service {
+	NAME=$1
+	PATH=$2
+	sudo cat <<- EOM > /etc/systemd/system/
+	[Unit]
+	Description=Bot Exchange Network
+
+	[Service]
+	WorkingDirectory=/root/bot-server/bin
+	ExecStart=/usr/bin/env node start
+	Restart=always
+
+	[Install]
+	WantedBy=multi-user.target
+	EOM
+}
+

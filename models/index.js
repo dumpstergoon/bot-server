@@ -1,5 +1,6 @@
 const {
-	create
+	create,
+	constructor
 } = require("../utils");
 const ONE_HOUR = 1000 * 60 * 60;
 
@@ -119,23 +120,22 @@ const models = {
 		}
 	},
 
-	State: () => {
-		return {
-			action: "index",
-			context: {},
-			model: {},
-			update_context(context) {
-				// return the updated context so we can send to client if
-				// need be.
-				return this.context =
-					Object.assign(this.context, context);
-			},
-			update_model(model) {
-				// After we update, we return the model so we can easily pass it along...
-				return this.model = Object.assign(this.model, model);
-			}
-		};
-	},
+	State: constructor({
+		action: "index",
+		context: {},
+		model: {},
+	}, {
+		update_context(context) {
+			// return the updated context so we can send to client if
+			// need be.
+			return this.context =
+				Object.assign(this.context, context);
+		},
+		update_model(model) {
+			// After we update, we return the model so we can easily pass it along...
+			return this.model = Object.assign(this.model, model);
+		}
+	}),
 
 	Session: (session_id = '', context = {}, duration = ONE_HOUR, time = Date.now()) => {
 		return create({

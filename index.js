@@ -186,12 +186,17 @@ module.exports = {
 					instance_id = potential_id || 'default'
 				] = extract_ids(id);
 
+				// Right, so i need to test this endpoint..
+				// it's causing my bot to crash.
+				console.log('POST REQUEST');
+				console.log(bot_id, instance_id, session_id);
+
 				bot_exchange(
 					bot_id,
 					instance_id,
 					session_id,
-					msg.user_input = "",
-					msg.context || {},
+					msg.user_input,
+					msg.context,
 					msg => {
 						res.json(msg);
 					}, error => {

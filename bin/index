@@ -3,6 +3,8 @@
 # Pull in our environment variables
 source ../.env
 
+sudo systemctl start bot-exchange.service
+
 for bot in $(ls ./bots); do
-	echo 
+	sudo systemctl start bot-$bot
 done
