@@ -303,7 +303,7 @@ module.exports = {
 					msg = req.body) => {
 
 					request.put({
-						url: `http://localhost:3000/exchange/${msg.blueprint_id}:${msg.component_id}`,
+						url: `http://localhost:3000/exchange/${msg.blueprint_id}:${id}`,
 						json: {
 							responses: msg.action_config
 						}
