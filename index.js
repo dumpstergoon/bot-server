@@ -20,7 +20,7 @@ const REGISTRY = "./data/registry.json";
 
 const registry = store(REGISTRY);
 
-const construct_id = (bot_id, instance_id, delim = '_') =>
+const construct_id = (bot_id, instance_id, delim = ':') =>
 	bot_id + (instance_id ? delim + instance_id : '');
 
 const extract_ids = (string, delim = ':') => {
