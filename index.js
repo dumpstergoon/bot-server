@@ -34,7 +34,7 @@ const extract_ids = (string, delim = ':') => {
 const send = (bot_id, message, callback) => {
 	let bot = registry[bot_id];
 	if (!bot)
-		callback(models.BotNotFoundReply(bot_id));
+		return callback(models.BotNotFoundReply(bot_id));
 	
 	let socket = new ømq.Request;
 	socket.connect(bot.uri);
@@ -137,12 +137,18 @@ module.exports = {
 					potential_id,
 					instance_id = potential_id || generate_uuid()
 				] = extract_ids(id);
+				
+				console.log('==============================');
+				console.log(id);
+				console.log(bot_id);
+				console.log(instance_id);
 
 				bot_customize_instance(
 					bot_id,
 					instance_id,
 					req.body,
 					msg => {
+						console.log('saved, baby?');
 						res.json({
 							id: `${bot_id}_${instance_id}`,
 							details: msg || {}
@@ -283,6 +289,9 @@ module.exports = {
 					session_id = req.params.session_id) => {
 				
 					let [bot_id] = extract_ids(id);
+					
+					console.log('>>', bot_id);
+
 					bot_fetch_logs(bot_id,
 						session_id, msg => res.json(msg));
 				});
@@ -301,12 +310,10 @@ module.exports = {
 				.post((req, res, next,
 					id = req.params.bot_id,
 					msg = req.body) => {
-
+					console.log(msg.action_config);
 					request.put({
 						url: `http://localhost:3000/exchange/${msg.blueprint_id}:${id}`,
-						json: {
-							responses: msg.action_config
-						}
+						json: msg.action_config
 					}, (e, r, b) => {
 						if (e)
 							return error ? error(err) : null;

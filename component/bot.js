@@ -125,10 +125,14 @@ const listen = async (channel, actions = {}, responses = {}, schema = {}) => {
 				console.log(session);
 				console.log('-------------------------------------------<<');
 
+				console.log('>>-----------------------------------------<<');
+				console.log(instance);
+				console.log('>>-----------------------------------------<<');
+
 				let action = await exchange(
 					actions, message.user_input, session.state,
-					session.responses || instance.responses ||
-						responses || [`<${session.state.action}:NO_RESPONSES_FOUND>`]);
+					instance.responses || session.responses ||
+						responses || [`<NO_RESPONSES_FOUND>`]);
 				
 				let response = models.ExchangeResponse(
 					action_name,
@@ -165,7 +169,7 @@ const listen = async (channel, actions = {}, responses = {}, schema = {}) => {
 		} else if (message.log) {
 			await channel.send(stringify(models.SessionLogsResponse(session.session_id, session.log)));
 		}
-	} else if (message.responses && instance !== 'default') {
+	} else if (message.responses && instance.instance_id !== 'default') {
 		instance.responses = message.responses;
 		await channel.send(stringify(models.CustomizeInstanceResponse(message.instance)));
 	} else
