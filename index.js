@@ -23,7 +23,7 @@ const registry = store(REGISTRY);
 const construct_id = (bot_id, instance_id, delim = '_') =>
 	bot_id + (instance_id ? delim + instance_id : '');
 
-const extract_ids = (string, delim = '_') => {
+const extract_ids = (string, delim = ':') => {
 	let pivot = string.lastIndexOf(delim);
 	return pivot > 0 ? [
 		string.substr(0, pivot),
@@ -290,15 +290,6 @@ module.exports = {
 		router.route("/config/:bot_id")
 				.get((req, res, next,
 					id = req.params.bot_id) => {
-					
-					console.log(id);
-
-					let [
-						bot_id,
-						potential_id,
-						instance_id = potential_id || 'default'
-					] = extract_ids(id);
-
 					let bot = registry[id];
 					res.json({
 						blueprint_id: id,
@@ -311,14 +302,8 @@ module.exports = {
 					id = req.params.bot_id,
 					msg = req.body) => {
 
-					let [
-						bot_id,
-						potential_id,
-						instance_id = potential_id || generate_uuid()
-					] = extract_ids(id);
-
 					request.put({
-						url: `http://localhost:3000/exchange/${msg.blueprint_id}_${msg.component_id}`,
+						url: `http://localhost:3000/exchange/${msg.blueprint_id}:${msg.component_id}`,
 						json: {
 							responses: msg.action_config
 						}
