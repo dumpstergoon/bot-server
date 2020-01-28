@@ -316,11 +316,14 @@ module.exports = {
 					let [
 						bot_id,
 						potential_id,
-						instance_id = potential_id || 'default'
+						instance_id = potential_id || generate_uuid()
 					] = extract_ids(id);
 
+					res.sendStatus(200);
+					return;
+
 					request.put({
-						url: `http://localhost:3000/exchange/${bot_id}_${instance_id}`,
+						url: `http://localhost:3000/exchange/${msg.component_id}_${instance_id}`,
 						json: {} // I'll likely need to modify this.... so leave it blank for now...
 					}, (e, r, b) => {
 						if (e)
