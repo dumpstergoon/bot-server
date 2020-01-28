@@ -194,9 +194,9 @@ module.exports = {
 					instance_id = potential_id || 'default'
 				] = extract_ids(id);
 
-				let real_id = instances[id];
-				if (real_id) {
-					bot_id = real_id;
+				let proxy = instances[id];
+				if (proxy) {
+					bot_id = proxy.bot_id;
 					instance_id = id;
 				}
 
