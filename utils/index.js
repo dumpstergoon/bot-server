@@ -11,14 +11,14 @@ const to_definition = (obj, map = to_map(obj)) => {
 		return [key,{
 			configurable: true,
 			enumerable: true,
-			writable: true, // Might remove this...
+			writable: true,
 			value: value
 		}];
 	}));
 };
 
-const create = (properties = {}, prototype = {}) =>
-	Object.create(prototype, to_definition(properties));
+const create = (properties, prototype) =>
+	Object.create(prototype || {}, to_definition(properties || {}));
 
 const uuid_part = () =>
 	("000" + ((Math.random() * 46656) | 0).toString(36)).slice(-3);
@@ -28,8 +28,8 @@ module.exports = {
 	to_object: to_object,
 	to_definition: to_definition,
 	create: create,
-	constructor: (defaults = {}, prototype = {}) =>
-		options => create(Object.assign({}, defaults, options), prototype),
+	constructor: (init, prototype) =>
+		options => create(init(options), prototype),
 	parse: req => JSON.parse(req[0]),
 	stringify: msg => JSON.stringify(msg, null, 2),
 	validate: (obj, schema) => true,

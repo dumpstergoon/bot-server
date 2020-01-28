@@ -27,7 +27,7 @@ const create_directory = path =>
 const touch_file = path =>
 	execSync(`touch ${path}`);
 
-const store = (path, _default = {}, _pivot = path.lastIndexOf('/')) => {
+const store = (path, _default, _pivot = path.lastIndexOf('/')) => {
 	create_directory(path.substring(0, _pivot));
 	touch_file(path);
 
@@ -42,7 +42,7 @@ const store = (path, _default = {}, _pivot = path.lastIndexOf('/')) => {
 	// OR, we keep this the exact same, and we just use the constructor
 	// to wrap whatever we pull. That's not a bad idea either...
 	let store = new Proxy(create(
-		data = data === "" ? _default : JSON.parse(data),
+		data = data === "" ? _default || {} : JSON.parse(data),
 		{
 			update(table) {
 				for (const key in table)

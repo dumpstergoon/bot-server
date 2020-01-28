@@ -83,14 +83,20 @@ const listen = async (channel, actions = {}, responses = {}, schema = {}) => {
 	let instance = instances[message.instance_id];
 	
 	if (message.session_id) {
-		// TODO: Need a proper function for this...
+		console.log('-->->->->->->->->->->->->->->->->->->->->->->');
+		console.log(message);
+		console.log(message.context);
+		console.log('>>===========================================');
+		console.log(sessions[message.session_id]);
+
 		sessions[message.session_id] = sessions[message.session_id] ||
 			models.Session(message.session_id, message.context);
+		
 		let session = sessions[message.session_id];
 
-		console.log('=============================================');
+		console.log('---------------------------------------------');
 		console.log(session);
-		console.log('=============================================');
+		console.log('-------------------------------------------<<');
 
 		if (message.user_input) {
 			let action_name = session.state.action;
@@ -99,15 +105,25 @@ const listen = async (channel, actions = {}, responses = {}, schema = {}) => {
 				await channel.send(stringify(models.ActionNotFoundError(action_name)));
 			else {
 				if (message.context)
-					session.context = Object.assign(session.context, message.context);
+					session.context = console.log('::', message.context, '->', session.context) ||
+						Object.assign({}, session.context, message.context);
+				
+				console.log('>>-------------------------------------------');
+				console.log(session);
 				
 				// We gotta ensure our API is functional...
 				session.state = models.State(session.state);
-				// Anything we get from the client, we add to our state's model...
 				session.state.update_model(session.context);
+
+				console.log('---------------------------------------------');
+				console.log(session);
 
 				// clear context
 				session.state.context = {};
+
+				console.log('---------------------------------------------');
+				console.log(session);
+				console.log('-------------------------------------------<<');
 
 				let action = await exchange(
 					actions, message.user_input, session.state,
@@ -131,6 +147,12 @@ const listen = async (channel, actions = {}, responses = {}, schema = {}) => {
 					models.UserMessageLog(message),
 					models.BotMessageLog(response)
 				);
+
+				console.log('>>-------------------------------------------');
+				console.log(sessions);
+				console.log(session);
+				console.log('===========================================<<');
+
 				// Once our exchange flow has finished, save the session:
 				session.save();
 			}

@@ -43,17 +43,23 @@ const chunkify = (string = "", chunk_size = 2, output = []) => {
 const verify = (passed, indices) =>
 	indices.map(([index, letter]) => letter).join('').toLowerCase() === passed.toLowerCase();
 
-// TODO: Need to make this a little more synchronous...
 bot.init(
 	require("./config.json"),
 	require("./responses.json"),
 	require("./schema.json"),
 	{
 		index: actions.router((msg, state) => {
-			let passphrase = state.model.passphrase || 'hannah';
-			let max_attempts = state.context.attempts_remaining = state.context.max_attempts = state.model.max_attempts || 3;
+			console.log('============ INDEX ============');
+			console.log(state);
+			console.log('===============================');
+
+			let passphrase =
+				state.model.passphrase || 'hannah';
+			let max_attempts = state.context.attempts_remaining = state.context.max_attempts =
+				state.model.max_attempts || 3;
 			
 			console.log('PASSPHRASE: ', passphrase);
+			console.log('MAX_ATTEMPTS: ', max_attempts);
 
 			let chunk_size = passphrase.length / 3;
 			let groups = chunkify(

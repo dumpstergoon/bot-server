@@ -120,31 +120,32 @@ const models = {
 		}
 	},
 
-	State: constructor({
-		action: "index",
-		context: {},
-		model: {},
+	State: constructor(options => {
+		return Object.assign({
+			action: "index",
+			context: {},
+			model: {},
+		}, options);
 	}, {
 		update_context(context) {
-			// return the updated context so we can send to client if
-			// need be.
 			return this.context =
 				Object.assign(this.context, context);
 		},
 		update_model(model) {
-			// After we update, we return the model so we can easily pass it along...
-			return this.model = Object.assign(this.model, model);
+			return this.model =
+				Object.assign(this.model, model);
 		}
 	}),
 
-	Session: (session_id = '', context = {}, duration = ONE_HOUR, time = Date.now()) => {
-		return create({
+	Session: (session_id = '', context, duration, time) => {
+		time = time || Date.now();
+		let o =  create({
 			session_id: session_id,
 			created: time,
-			expires: time + duration,
+			expires: time + (duration || ONE_HOUR),
 			state: models.State(),
 			responses: null,
-			context: context,
+			context: context || {},
 			log: [] // Back and forth log
 		}, {
 			log_message() {
@@ -153,7 +154,9 @@ const models = {
 				// and having all the messages come down the pipe.
 				// TODO: create end-point for logs.
 			}
-		})
+		});
+		console.log('CREATING SESSION OBJECT', o);
+		return o;
 	},
 
 	Instance: (instance_id = 'default') => {
@@ -184,7 +187,7 @@ const models = {
 		});
 	},
 
-	ResponseModel: (model = {}) => {
+	ResponseModel: model => {
 		let datetime = new Date(model.timestamp || Date.now()).getHours();
 		return Object.assign(model, {
 			name: model.user ? model.user.fristName : '<NAME_NOT_FOUND>',

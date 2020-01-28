@@ -2,14 +2,18 @@
 // @ts-nocheck
 'use strict';
 console.log('Starting Bot Exchange Network...');
-
 const VIEWS = '../views';
+
+const ben = require('../index');
+const config = require("./config.json");
+
 const express = require('express'),
-		protocol = 'insecure',
-		secure = (string => protocol === 'secure' ? string : ''),
-		port = process.env.PORT || 3000,
-		domain = process.env.DOMAIN || 'localhost';
+		domain = config.domain || 'localhost',
+		port = config.port || 3000,
+		protocol = config.status || 'insecure',
+		secure = (string => protocol === 'secure' ? string : '');
 const express_websockets = require('express-ws')(express());
+
 const app = express_websockets.app;
 const zengine = require('../../zengine');
 const render = zengine.init({
@@ -23,8 +27,6 @@ const render = zengine.init({
 	endpoint: `${ domain }${ secure ? '' : ':' + port }/exchange`,
 	uuid: require('../utils').generate_uuid
 });
-
-const ben = require('../index');
 
 app.engine('jst', zengine.express(render));
 app.set('views', VIEWS);
