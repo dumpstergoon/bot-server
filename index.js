@@ -310,8 +310,6 @@ module.exports = {
 				.post((req, res, next,
 					id = req.params.bot_id,
 					msg = req.body) => {
-					
-					console.log(id);
 
 					let [
 						bot_id,
@@ -319,12 +317,11 @@ module.exports = {
 						instance_id = potential_id || generate_uuid()
 					] = extract_ids(id);
 
-					res.sendStatus(200);
-					return;
-
 					request.put({
-						url: `http://localhost:3000/exchange/${msg.component_id}_${instance_id}`,
-						json: {} // I'll likely need to modify this.... so leave it blank for now...
+						url: `http://localhost:3000/exchange/${msg.blueprint_id}_${msg.component_id}`,
+						json: {
+							responses: msg.action_config
+						}
 					}, (e, r, b) => {
 						if (e)
 							return error ? error(err) : null;
