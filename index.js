@@ -4,6 +4,7 @@
 // This allows us to keep this as a fragment and easily embeddable into your own
 // server application.
 const ømq = require('zeromq');
+const request = require("request");
 const {
 	store
 } = require("./io");
@@ -92,7 +93,7 @@ module.exports = {
 			next();
 		});
 
-		router.route("/")
+		router.route("/exchange")
 			.get((req, res) =>
 				res.render("bot-list", {
 					title: `${SKYCRATE_LTD} | ${BEN}`,
@@ -110,7 +111,7 @@ module.exports = {
 				res.sendStatus(200);
 			});
 
-		router.route("/:bot_id")
+		router.route("/exchange/:bot_id")
 			.get((req, res, next, id = req.params.bot_id) => {
 				let [
 					bot_id,
@@ -152,7 +153,7 @@ module.exports = {
 					});
 			});
 
-		router.route("/:bot_id/:session_id")
+		router.route("/exchange/:bot_id/:session_id")
 			.get((req, res, next,
 					id = req.params.bot_id,
 					session_id = req.params.session_id) => {
@@ -228,7 +229,7 @@ module.exports = {
 				bot_clear_session(extract_ids(id)[0], session_id, msg => res.json(msg));
 			});
 		
-		router.ws("/:bot_id/:session_id",
+		router.ws("/exchange/:bot_id/:session_id",
 			(ws, req, next,
 				id = req.params.bot_id,
 				session_id = req.params.session_id) => {
@@ -276,7 +277,7 @@ module.exports = {
 				});
 			});
 		
-		router.route("/:bot_id/:session_id/log")
+		router.route("/exchange/:bot_id/:session_id/log")
 			.get((req, res, next,
 					id = req.params.bot_id,
 					session_id = req.params.session_id) => {
@@ -286,6 +287,28 @@ module.exports = {
 						session_id, msg => res.json(msg));
 				});
 
+		router.route("/config/:bot_id")
+				.post((req, res, next,
+					id = req.params.bot_id,
+					msg = req.body) => {
+					
+					console.log(id, msg);
+
+					let [
+						bot_id,
+						potential_id,
+						instance_id = potential_id || 'default'
+					] = extract_ids(id);
+
+					request.put({
+						url: `http://localhost:3000/exchange/${bot_id}_${instance_id}`,
+						json: {} // I'll likely need to modify this.... so leave it blank for now...
+					}, (e, r, b) => {
+						if (e)
+							return error ? error(err) : null;
+						res.sendStatus(200);
+					});
+				})
 		// This is for Facebook... possibly Whatsapp as well.
 		// Time to get these pages sorted and tested so I can use components
 		// on FB, whatsapp, embedded, etc....

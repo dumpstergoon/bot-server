@@ -37,7 +37,7 @@ app.use(express.urlencoded({
 	extended: true
 }));
 app.use(
-	"/exchange",
+	"/",
 	ben.init(express.Router(), express_websockets)
 );
 
