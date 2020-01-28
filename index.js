@@ -139,12 +139,6 @@ module.exports = {
 					potential_id,
 					instance_id = potential_id || generate_uuid()
 				] = extract_ids(id);
-
-				let real_id = instances[id];
-				if (real_id) {
-					bot_id = real_id;
-					instance_id = id;
-				}
 				
 				console.log('==============================');
 				console.log(id);
@@ -199,6 +193,12 @@ module.exports = {
 					potential_id,
 					instance_id = potential_id || 'default'
 				] = extract_ids(id);
+
+				let real_id = instances[id];
+				if (real_id) {
+					bot_id = real_id;
+					instance_id = id;
+				}
 
 				// Right, so i need to test this endpoint..
 				// it's causing my bot to crash.
