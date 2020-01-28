@@ -288,6 +288,25 @@ module.exports = {
 				});
 
 		router.route("/config/:bot_id")
+				.get((req, res, next,
+					id = req.params.bot_id) => {
+					
+					console.log(id);
+
+					let [
+						bot_id,
+						potential_id,
+						instance_id = potential_id || 'default'
+					] = extract_ids(id);
+
+					let bot = registry[id];
+					res.json({
+						blueprint_id: id,
+						bot_name: bot.name,
+						personality: "form-filling",
+						action_config: bot.responses
+					});
+				})
 				.post((req, res, next,
 					id = req.params.bot_id,
 					msg = req.body) => {
