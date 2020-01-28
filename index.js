@@ -311,7 +311,7 @@ module.exports = {
 					id = req.params.bot_id,
 					msg = req.body) => {
 					
-					console.log(id, msg);
+					console.log(id);
 
 					let [
 						bot_id,
