@@ -17,8 +17,10 @@ const models = require("./models");
 const SKYCRATE_LTD = 'SkyCrate Ltd.';
 const BEN = 'Bot Exchange Network (B.E.N)';
 const REGISTRY = "./data/registry.json";
+const INSTANCES = "./data/instances.json";
 
 const registry = store(REGISTRY);
+const instances = store(INSTANCES);
 
 const construct_id = (bot_id, instance_id, delim = ':') =>
 	bot_id + (instance_id ? delim + instance_id : '');
@@ -137,6 +139,12 @@ module.exports = {
 					potential_id,
 					instance_id = potential_id || generate_uuid()
 				] = extract_ids(id);
+
+				let real_id = instances[id];
+				if (real_id) {
+					bot_id = real_id;
+					instance_id = id;
+				}
 				
 				console.log('==============================');
 				console.log(id);
@@ -148,7 +156,6 @@ module.exports = {
 					instance_id,
 					req.body,
 					msg => {
-						console.log('saved, baby?');
 						res.json({
 							id: `${bot_id}_${instance_id}`,
 							details: msg || {}
@@ -231,7 +238,6 @@ module.exports = {
 			.delete((req, res, next,
 				id = req.params.bot_id,
 				session_id = req.params.session_id) => {
-				// Yeah I really should abstract this a bit better...
 				bot_clear_session(extract_ids(id)[0], session_id, msg => res.json(msg));
 			});
 		
@@ -310,7 +316,9 @@ module.exports = {
 				.post((req, res, next,
 					id = req.params.bot_id,
 					msg = req.body) => {
-					console.log(msg.action_config);
+					instances[id] = {
+						bot_id: msg.blueprint_id
+					};
 					request.put({
 						url: `http://localhost:3000/exchange/${msg.blueprint_id}:${id}`,
 						json: msg.action_config
