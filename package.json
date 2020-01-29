@@ -24,6 +24,8 @@
   },
   "homepage": "https://github.com/dumpstergoon/bot-server#readme",
   "dependencies": {
+    "compromise": "^12.3.0",
+    "compromise-numbers": "0.0.4",
     "express": "^4.17.1",
     "express-ws": "^4.0.0",
     "request": "^2.88.0",

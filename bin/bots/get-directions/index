@@ -1,0 +1,26 @@
+#!/usr/bin/env node
+// @ts-nocheck
+'use strict';
+
+const {
+	bot,
+	actions
+} = require('../../../component');
+
+bot.init(
+	require("./config.json"),
+	require("./responses.json"),
+	require("./schema.json"),
+	{
+		index: actions.router((msg, state) => {
+			console.log('============ INDEX ============');
+			console.log(state);
+			console.log('===============================');
+
+			return "exit";
+		}),
+		
+		failed: actions.fail("FAILED:"),
+		exit: actions.exit("EXIT:"),
+	}
+);

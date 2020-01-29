@@ -1,0 +1,11 @@
+{
+	"index": [
+		"Hello, World."
+	],
+	"exit": [
+		"ITINERARY COMPLETE. GENERATE OR CLEAR SESSION."
+	],
+	"failed": [
+		"ITINERARY ABORTED. GENERATE OR CLEAR SESSION"
+	]
+}

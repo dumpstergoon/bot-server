@@ -1,11 +1,11 @@
 {
 	"ask_passphrase": [
-		"Type the [index_one], [index_two], and [index_three] letters of your chosen passphrase. Enter this on its own as one word.",
-		"Enter as a single word the [index_one], [index_two], and [index_three] letters of your stored passphrase."
+		"Type the [index_one], [index_two], and [index_three] characters of your chosen passphrase. Enter this on its own as one word.",
+		"Enter as a single word the [index_one], [index_two], and [index_three] characters of your stored passphrase. You have [max_attempts] attempts."
 	],
 	"passphrase_denied": [
 		"Passphrase wasn't a match... please try again.",
-		"Didn't quite get that.",
+		"Sorry, I didn't quite get that. You have [tries_left] attempts remaining.",
 		"Just the [index_one], [index_two], and [index_three] letters only please."
 	],
 	"passphrase_verified": [

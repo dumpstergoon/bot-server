@@ -1,5 +1,5 @@
 {
-	"domain": "skycrate.net",
-	"status": "secure",
+	"domain": "localhost",
+	"status": "insecure",
 	"port": 3000
 }
