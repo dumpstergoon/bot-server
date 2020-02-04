@@ -1,0 +1,11 @@
+{
+	"index": [
+		"Hello, World."
+	],
+	"exit": [
+		"LOCATION FOUND. GENERATE OR CLEAR SESSION."
+	],
+	"failed": [
+		"FAILED TO FIND LOCATION. GENERATE OR CLEAR SESSION"
+	]
+}

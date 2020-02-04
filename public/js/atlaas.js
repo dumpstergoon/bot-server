@@ -213,13 +213,19 @@ const atlas = z.define(atlas => {
 			}),
 		}, z.abstracts.Template),
 
-		"z-chat": z.element({
-			// Chatbot endpoint
-			uri: z.attribute.string().required(),
-		}, z.abstracts.List),
-
 		"z-chat-item": z.element({
 			user: z.attribute.string().required(),
-		}, z.abstracts.ListItem)
+		}, z.abstracts.ListItem),
+
+		"z-chat": z.element({
+			uri: z.attribute.string().required(),
+			send() {
+				// This is some message that we, the user, has made
+				// and are sending to Atlaas
+			},
+			receive() {
+				// This is a message we revceive from a component endpoint.
+			}
+		}, z.abstracts.List),
 	};
 });

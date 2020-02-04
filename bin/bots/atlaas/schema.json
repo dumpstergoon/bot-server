@@ -1,34 +1,19 @@
 {
-	"host": "http://localhost:8080/exchange",
-	"name": "Hello World",
-	"vendor": "SkyCrate Ltd.",
-	"version": "1.0.0-beta",
-	"author": "Graham Robertson",
-	"languages": [
-		{
-			"language": "English",
-			"regions": [
-				"en-gb",
-				"en-ca",
-				"en-us"
-			]
-		}
-	],
-	"description": "Hello World Chatbot Component. This is an example chatbot component for easy implmentation.",
-
-	"id": "skycrate-hello-world",
-	"uri": "ipc://@skycrate-hello-world",
-
-	"values": {
-		"time_of_day": {
-			"description": "Depending on the current time, this value can be \"morning\", \"afternoon\", or \"evening\".",
-			"type": "string"
+	"response_variables": {
+		"title": "Response Template Values",
+		"description": "Values that you can use when customising the bot's responses.",
+		"type": "object",
+		"properties": {
+			"unknown": {
+				"description": "unknown",
+				"type": "null"
+			}
 		}
 	},
 
 	"request": {
 		"title": "Exchange Body",
-		"description": "Data to be sent with each POST equest.",
+		"description": "Data to be sent with each POST request or Web Socket message.",
 		"type": "object",
 		"properties": {
 			"user_input": {
@@ -36,19 +21,16 @@
 				"type": "string"
 			},
 			"context": {
-				"description": "Auxillary information used by the bot to determine appropriate responses. Only needs to be sent on the first request.",
+				"title": "Session Context",
+				"description": "Auxillary information used by the bot to determine appropriate responses. Usually only needs to be sent on the first request.",
 				"type": "object",
 				"properties": {
-					"datetime": {
-						"description": "<b>Optional.</b> Provide context for the time of day. Can be used in responses: <code>\"Good [time_of_day]!\"</code>.<br /><br />Where <code>[time_of_day]</code> has the values <em>\"morning\"</em>, <em>\"afternoon\"</em>, and <em>\"evening\"</em> depending on the time provided.<br /><br />Defaults to current UTC time.",
-						"type": ["date", "null"]
-					},
-					"responses": {
-						"description": "<b>Optional.</b> Customise how the bot responds to each action in the component.",
-						"type": ["object", "null"]
+					"timestamp": {
+						"description": "<b>Optional.</b> Provide context for the time of day (use milliseconds from epoch like with <code>Date.now()</code>). Can be used in responses: <code>\"Good [time_of_day]!\"</code>.<br /><br />Where <code>[time_of_day]</code> has the values <em>\"morning\"</em>, <em>\"afternoon\"</em>, and <em>\"evening\"</em> depending on the time provided.<br /><br />Defaults to current UTC time.",
+						"type": "integer"
 					}
 				},
-				"required": ["passphrase"]
+				"required": ["destination"]
 			}
 		},
 		"required": ["user_input", "context"]
@@ -56,7 +38,7 @@
 
 	"response": {
 		"title": "Exchange Response",
-		"description": "Response and data sent back by the bot.",
+		"description": "The bot component response to your <em>exchange request</em>.",
 		"type": "object",
 		"properties": {
 			"action": {
@@ -64,8 +46,12 @@
 				"type": "string"
 			},
 			"response": {
-				"description": "Text response from bot component.",
+				"description": "Text response from bot component to be used in the chat.",
 				"type": "string"
+			},
+			"response_time": {
+				"description": "Time taken, in seconds, to complete the exchange.",
+				"type": "number"
 			},
 			"confidence": {
 				"description": "The confidence that this is the appropriate response. Value lies between <code>0</code> and <code>1</code>.",
@@ -90,9 +76,11 @@
 				"type": "boolean"
 			},
 			"updated_context": {
+				"title": "Updated Context",
 				"description": "Any updated or new data from the bot.",
 				"type": "object",
-				"properties": {}
+				"properties": {
+				}
 			}
 		}
 	}

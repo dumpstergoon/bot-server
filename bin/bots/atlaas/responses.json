@@ -1,0 +1,11 @@
+{
+	"index": [
+		"Hello, World."
+	],
+	"exit": [
+		"ATLAAS COMPLETE. WHICH IS WEIRD BECAUSE THIS SHOULD LOOP. GENERATE OR CLEAR SESSION."
+	],
+	"failed": [
+		"ATLAAS FAILED. GENERATE OR CLEAR SESSION"
+	]
+}

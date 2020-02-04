@@ -1,0 +1,11 @@
+{
+	"index": [
+		"Hello, World."
+	],
+	"exit": [
+		"USER LOCATION FOUND. GENERATE OR CLEAR SESSION."
+	],
+	"failed": [
+		"COULD NOT OBTAIN USER POSITION. GENERATE OR CLEAR SESSION"
+	]
+}

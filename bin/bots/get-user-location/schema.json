@@ -1,0 +1,99 @@
+{
+	"response_variables": {
+		"title": "Response Template Values",
+		"description": "Values that you can use when customising the bot's responses.",
+		"type": "object",
+		"properties": {
+			"unknown": {
+				"description": "unknown",
+				"type": "null"
+			}
+		}
+	},
+
+	"request": {
+		"title": "Exchange Body",
+		"description": "Data to be sent with each POST request or Web Socket message.",
+		"type": "object",
+		"properties": {
+			"user_input": {
+				"description": "Message sent to bot by the user.",
+				"type": "string"
+			},
+			"context": {
+				"title": "Session Context",
+				"description": "Auxillary information used by the bot to determine appropriate responses. Usually only needs to be sent on the first request.",
+				"type": "object",
+				"properties": {
+					"destination": {
+						"description": "The destination you want the user to find. This can be an address or GPS coordinates. Or even a popular landmark!",
+						"type": "string"
+					},
+					"current_location": {
+						"description": "<b>Optional.</b> The location your user will be starting their journey from. This can be an address, gps coordinates, or popular landmark.<br /><br />There is no default.",
+						"type": "string"
+					},
+					"mode": {
+						"description": "<b>Optional.</b> Your user's mode of transportation. This can be either <em>\"foot\"</em>, <em>\"cycle\"</em>, <em>\"urban\"</em>, or <em>\"car\"</em>.<br /><br />There is no default.",
+						"type": "string"
+					},
+					"timestamp": {
+						"description": "<b>Optional.</b> Provide context for the time of day (use milliseconds from epoch like with <code>Date.now()</code>). Can be used in responses: <code>\"Good [time_of_day]!\"</code>.<br /><br />Where <code>[time_of_day]</code> has the values <em>\"morning\"</em>, <em>\"afternoon\"</em>, and <em>\"evening\"</em> depending on the time provided.<br /><br />Defaults to current UTC time.",
+						"type": "integer"
+					}
+				},
+				"required": ["destination"]
+			}
+		},
+		"required": ["user_input", "context"]
+	},
+
+	"response": {
+		"title": "Exchange Response",
+		"description": "The bot component response to your <em>exchange request</em>.",
+		"type": "object",
+		"properties": {
+			"action": {
+				"description": "The name of the action performed.",
+				"type": "string"
+			},
+			"response": {
+				"description": "Text response from bot component to be used in the chat.",
+				"type": "string"
+			},
+			"response_time": {
+				"description": "Time taken, in seconds, to complete the exchange.",
+				"type": "number"
+			},
+			"confidence": {
+				"description": "The confidence that this is the appropriate response. Value lies between <code>0</code> and <code>1</code>.",
+				"type": "number",
+				"minimum": 0,
+				"maximum": 1
+			},
+			"out_of_context": {
+				"description": "<code>True</code> if the bot receives input it feels was out of context. The bot has the ability to handle this but you might want to use this opportunity to intercept and do something else in your bot.",
+				"type": "boolean"
+			},
+			"idontknow": {
+				"description": "<code>True</code> if the bot did not understand the user input. The bot has the ability to handle this (eg re-phrasing a question or instruction). However, you might wish to try and understand the input yourself and either switch to another component or append a reply to what this component will say next.",
+				"type": "boolean"
+			},
+			"component_failed": {
+				"description": "<code>True</code> when the component is unable to complete its goal.",
+				"type": "boolean"
+			},
+			"component_done": {
+				"description": "<code>True</code> when the component has successfully fulfilled its goal. This is a good time to check the updated_context.",
+				"type": "boolean"
+			},
+			"updated_context": {
+				"title": "Updated Context",
+				"description": "Any updated or new data from the bot.",
+				"type": "object",
+				"properties": {
+				}
+			}
+		}
+	}
+}
