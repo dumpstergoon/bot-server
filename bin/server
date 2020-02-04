@@ -2,6 +2,7 @@
 // @ts-nocheck
 'use strict';
 console.log('Starting Bot Exchange Network...');
+const PUBLIC = '../public';
 const VIEWS = '../views';
 
 const ben = require('../index');
@@ -37,11 +38,25 @@ app.use(express.json());
 app.use(express.urlencoded({
 	extended: true
 }));
-app.use(
-	"/",
-	ben.init(express.Router(), express_websockets)
-);
+app.use(express.static(PUBLIC));
 
+let router = express.Router();
+
+router.route("/")
+	.get((req, res) => {
+		res.render("index", {
+			title: "SkyCrate Ltd. | House for Open Software and Technology (H.O.S.T)"
+		})
+	});
+
+router.route("/atlaas")
+	.get((req, res) => {
+		res.render("atlaas", {
+			title: "SkyCrate Ltd. | House for Open Software and Technology (H.O.S.T)"
+		})
+	})
+
+app.use("/", ben.init(router, express_websockets));
 app.listen(port, () => {
 	console.log(`Bot Exchange Network hosting on port ${port}.`);
 });

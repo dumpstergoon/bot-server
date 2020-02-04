@@ -2,295 +2,60 @@
 <!DOCTYPE html>
 <html lang="en-gb">
 	<head>
-		<meta charset="UTF-8">
-		<meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+		<meta charset="utf-8">
+		<meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
 
-		<title>${ item.title }</title>
-		<style type="text/css">
-			* {
-				outline:none;
-			}
-			body {
-				color:#4e4e4e;
-				background-color:rgb(249, 251, 252);
-				font-family:'Open Sans', Arial, Helvetica, sans-serif;
-				font-size:11pt;
-				margin:20pt auto;
-				padding:0pt 10pt;
-				max-width:720px;
-			}
+		<meta name="msapplication-TileColor" content="#ffffff">
+		<meta name="theme-color" content="#ffffff">
+		<meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
 
-			hr {
-				height:0;
-				border:none;
-				border-top:1px solid;
-				margin:10pt 0;
-			}
+		<link rel="manifest" href="/manifest.json">
 
-			h1 {
-				border-top:3px solid;
-				padding-top:12pt;
-				color:#111;
-				font-size:22pt;
-			}
+		<link rel="apple-touch-icon" sizes="57x57" href="/apple-icon-57x57.png">
+		<link rel="apple-touch-icon" sizes="60x60" href="/apple-icon-60x60.png">
+		<link rel="apple-touch-icon" sizes="72x72" href="/apple-icon-72x72.png">
+		<link rel="apple-touch-icon" sizes="76x76" href="/apple-icon-76x76.png">
+		<link rel="apple-touch-icon" sizes="114x114" href="/apple-icon-114x114.png">
+		<link rel="apple-touch-icon" sizes="120x120" href="/apple-icon-120x120.png">
+		<link rel="apple-touch-icon" sizes="144x144" href="/apple-icon-144x144.png">
+		<link rel="apple-touch-icon" sizes="152x152" href="/apple-icon-152x152.png">
+		<link rel="apple-touch-icon" sizes="180x180" href="/apple-icon-180x180.png">
+		<link rel="icon" type="image/png" sizes="192x192"  href="/android-icon-192x192.png">
+		<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+		<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">
+		<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
 
-			h2, h3, h4, h5, h6 {
-				color:#272727;
-				margin:1em 0;
-			}
-
-			h2 {
-				font-size:18pt;
-			}
-
-			h3 {
-				font-size:15pt;
-			}
-
-			h4 {
-				font-size:13pt;
-			}
-
-			h5 {
-				font-size:12pt;
-			}
-
-			h6 {
-				font-size:11pt;
-			}
-
-			a {
-				color:deeppink;
-				text-decoration:none;;
-			}
-
-			a:hover {
-				text-decoration:underline;
-			}
-
-			em {
-				font-weight:bold;
-			}
-
-			p {
-				color:#666;
-				line-height:1.75em;
-				margin:2em 0;
-			}
-
-			input[type="text"] {
-				border:none;
-				border-bottom:3px solid #aeaeae;
-				font-size:13pt;
-				font-family:'Open Sans', Arial, Helvetica, sans-serif;
-				padding:10pt 12pt 8pt 8pt;
-			}
-
-			button {
-				color:white;
-				padding:7pt 10pt;
-				font-size:13pt;
-				background-color:#61dde6;
-				border:none;
-				cursor:pointer;
-			}
-
-			button:hover {
-				background-color:deeppink;
-			}
-
-			menu {
-				list-style:none;
-				padding:0;
-			}
-
-			menu > li {
-				padding:10pt 10pt 10pt 15pt;
-			}
-
-			menu > li:nth-child(odd), tbody > tr:nth-child(odd) {
-				background-color:rgba(226, 234, 241, 0.27);
-			}
-
-			code {
-				background-color:rgba(226, 234, 241, 0.72);
-				padding:3pt 5pt;
-			}
-
-			pre > em {
-				display:inline-block;
-				padding:5pt 0;
-				font-size:1.25em;;
-			}
-
-			pre > code .hljs-comment {
-				color: #999999;
-			}
-			
-			.action,
-			pre > code .hljs-attr,
-			pre > code .hljs-const {
-				color: #f2777a;
-			}
-
-			.user,
-			pre > code .hljs-number,
-			pre > code .hljs-built_in,
-			pre > code .hljs-literal,
-			pre > code .hljs-params {
-				color: #f99157;
-			}
-
-			.bot,
-			pre > code .hljs-string,
-			pre > code .hljs-value,
-			pre > code .hljs-inheritance {
-				color: #99cc99;
-			}
-
-			.time,
-			pre > code .hljs-function,
-			pre > code .hljs-title {
-				color:#6699cc !important;
-			}
-
-			pre > code .hljs-keyword {
-				color: #cc99cc;
-			}
-
-			pre > code.hljs {
-				display: block;
-				background: #2d2d2d;
-				color: #cccccc;
-				line-height:1.5em;
-				padding:10pt 10pt 15pt 20pt;
-				font-size:9pt;
-			}
-
-			table {
-				border-collapse:collapse;
-				margin:30pt 0;
-				width:100%;
-				font-size:10pt;
-			}
-
-			th, td {
-				padding:7pt 10pt;
-			}
-
-			td:nth-child(even) {
-				background-color:rgba(255, 255, 255, 0.36);
-			}
-
-			th.property,
-			td.property {
-				border-right:1px solid #aeaeae;
-				text-align:right;
-				font-weight:bold;
-			}
-
-			th.type,
-			td.type {
-				text-align:center;
-			}
-
-			th.description,
-			td.description {
-				border-left:1px solid #aeaeae;
-				text-align:left;
-				padding-right:5pt;
-			}
-
-			td.property {
-				font-family:monospace;
-			}
-
-			td.description {
-				line-height:1.75em;
-			}
-
-			tbody td {
-				border-top:1px solid #aeaeae;
-				vertical-align:top;
-			}
-
-			#chat_window {
-				position:relative;
-				display:block;
-				background:#2d2d2d;
-				color:#cccccc;
-				line-height:1.75em;
-				padding:7pt 0 10pt;
-				font-family:monospace;
-				min-height:40vh;
-				max-height:50vh;
-				list-style:none;
-
-				overflow-x:hidden;
-				overflow-y:auto;
-			}
-
-			#chat_window li {
-				position: relative;
-				display:block;
-				margin:0;
-				padding:7pt 0;
-			}
-
-			#chat_window li::after {
-				content:".";
-				display:block;
-				height:0;
-				visibility:hidden;
-				clear:both;
-			}
-
-			#chat_window li.bot {
-				background-color:rgba(255, 255, 255, 0.13);
-			}
-
-			#chat_window label {
-				float:left;
-				color:#ccc;
-				font-weight:bold;
-				padding-right:7pt;
-				width:5.25em;
-				text-align:right;
-			}
-
-			#chat_window span {
-				float:left;
-				width:calc(100% - 77pt - 5.25em);
-			}
-
-			#chat_controls {
-				display:flex;
-				flex-direction:row;
-				flex-wrap:nowrap;
-				align-items:stretch;
-				justify-content:flex-end;
-				width:100%;
-			}
-
-			#chat_controls input {
-				flex-grow:2;
-				margin-right:10pt;
-			}
-
-			#chat_window .time {
-				position: absolute;
-				float:none;
-				right:10pt;
-				top:0.6125em;
-				width:auto;
-			}
-
-			#console {
-			}
-		</style>
-
+		<link rel="stylesheet" href="/styles/style.css" type="text/css" />
+		<!-- Mobile-first CSS (portrait) -->
+		<link rel="stylesheet" type="text/css" href="/styles/base.css" />
+		<!-- Mobile CSS (landscape) -->
+		<link rel="stylesheet" type="text/css" href="/styles/mobile-landscape.css"
+			media="only screen and (min-width:420px)" />
+		<!-- Tablet CSS (portrait) -->
+		<link rel="stylesheet" type="text/css" href="/styles/tablet-portrait.css"
+			media="only screen and (min-width:720px)" />
+		<!-- Tablet CSS (landscape) -->
+		<link rel="stylesheet" type="text/css" href="/styles/tablet-landscape.css"
+			media="only screen and (min-width:1024px)" />
+		<!-- Desktop -->
+		<link rel="stylesheet" type="text/css" href="/styles/desktop.css"
+			media="only screen and (min-width:1440px)" />
+		<!-- Theme -->
+		<link rel="stylesheet" type="text/css" href="/styles/theme.css" />
+		<!-- TV -->
+		<link rel="stylesheet" type="text/css" href="/styles/tv.css" media="only tv" />
+		<!-- Print -->
+		<link rel="stylesheet" type="text/css" href="/styles/print.css" media="only print" />
+		<!-- Highlight JS styles and shit... -->
 		<link rel="stylesheet" href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.18.0/build/styles/default.min.css">
+		
+		<title>${ item.title }</title>
+
+		<script src="https://unpkg.com/three/build/three.min.js"></script>
+		<script src="https://unpkg.com/@here/harp.gl/dist/harp.js"></script>
 		<script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.18.0/build/highlight.min.js"></script>
+		<script src="js/z.js"></script>
+		<script src="js/z.abstracts.js"></script>
 	</head>
 	<body>
 		${ placeholder }
