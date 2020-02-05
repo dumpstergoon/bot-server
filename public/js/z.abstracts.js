@@ -65,9 +65,10 @@ z.abstracts = z.define(abstracts => {
 
 		Template: z.abstract({
 			template: z.property.type.function(),
-			connected: z.listener(element =>
-				element.render(element)),
-			render() {
+			connected: z.listener(element => {
+				element.render_me(element);
+			}),
+			render_me() {
 				this.innerHTML = this.template(this)
 					.replace(/[\s]+</gi, '<')
 					.replace(/>[\s]+/gi, '>');

@@ -56,6 +56,7 @@ header h1 {
 }
 
 header h2 {
+	margin-top:260px;
 	font-size:15pt;
 	font-weight:normal;
 }
@@ -217,6 +218,80 @@ td.description {
 tbody td {
 	border-top:1px solid #aeaeae;
 	vertical-align:top;
+}
+
+z-scene {
+	/* NOTHING IS ALLOWED TO BE ANYTHING ELSE BUT ABSOLUTE... */
+	position:absolute;
+	top:45px;
+	left:25px;
+	width:200px;
+	height:200px;
+	perspective:800px;
+	perspective-origin:50% 50%;
+}
+
+z-cube {
+	position:absolute;
+	transform-style:preserve-3d;
+	width:200px;
+	height:200px;
+	transform:rotateY(-40deg) rotateX(24deg);
+}
+
+z-face {
+	border:2px solid;
+	border-top:5px solid;
+	background-color:white;
+	position:absolute;
+	width:200px;
+	height:200px;
+
+	overflow:hidden;
+}
+
+z-face[top] {
+	transform:translateY(-100px) rotateX(-90deg);
+}
+
+z-face[left] {
+	transform:translateX(-100px) rotateY(270deg);
+}
+
+z-face[front] {
+	transform:translateZ(100px);
+	text-align:right;
+}
+
+z-face[right] {
+	transform:translateX(100px) rotateY(-270deg);
+	text-align:right;
+}
+
+z-face[front]::after,
+z-face[right]::after {
+	position:relative;
+	top:0.125em;
+	content:"sky crate";
+	font-size:92px;
+	font-weight:bold;
+	line-height:0.9em;
+}
+
+z-face[front]::after {
+	right:-44px;
+}
+
+z-face[right]::after {
+	left:-156px;
+}
+
+z-face[back] {
+	transform:translateZ(-100px) rotateY(180deg);
+}
+
+z-face[bottom] {
+	transform:translateY(100px) rotateX(90deg);
 }
 
 #chat_window {
