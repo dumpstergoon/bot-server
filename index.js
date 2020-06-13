@@ -331,6 +331,7 @@ module.exports = {
 		// This is for Facebook... possibly Whatsapp as well.
 		// Time to get these pages sorted and tested so I can use components
 		// on FB, whatsapp, embedded, etc....
+		// Yeah okay cool. We have to add ourt facebook chat hooks, mastadon/ActivityPush/etc.. etc.. standardized site hooks!
 		router.route("/webhook")
 			// Validation:
 			.get(() => {})
